@@ -1,0 +1,218 @@
+/*
+ * @file YokanCube.css
+ * @description YokanCubeコンポーネントのスタイルシート (Framer Motion連携用)
+ *
+ * ## 概要
+ * 直方体（羊羹）の基本的な見た目と3D変形、ホバーエフェクトを定義します。
+ * アニメーションの多くはFramer Motionで制御されます。
+ * 幅200px、高さ100px、奥行き100pxの直方体を想定しています。
+ *
+ * ## 主な仕様
+ * - 直方体のシーン（親要素）とキューブ自体（子要素）のスタイルを定義します。
+ * - 各面の位置と回転をCSS transformで指定し、3D形状を構築します。
+ * - preserve-3dを使用して、子要素が3D空間内で配置されるようにします。
+ * - backface-visibility: hidden; を使用して、裏面が見えないようにします。
+ * - ホバー時のインタラクションは引き続きCSSで制御。
+ *
+ * ## 制限事項
+ * - サイズや色は固定値で指定されています。
+ */
+
+.yokan_scene {
+  width: 200px; /* 羊羹の幅 */
+  height: 100px; /* 羊羹の高さ */
+  perspective: 600px; /* 3Dシーンの奥行き */
+  margin: auto; /* これでFlexboxコンテナ内で中央に配置される */
+  position: relative; /* 集中線のコンテナやキューブの基準点とするため必要 */
+  /* アニメーション開始前の初期状態 */
+  opacity: 0; /* 最初は非表示 */
+  transform: scale(5); /* 大きく、初期回転角度で配置 */
+}
+
+/* 羊羹出現アニメーションのキーフレーム */
+@keyframes yokan_appear {
+  0% {
+    opacity: 0;
+    transform: scale(5); /* 開始時の状態 */
+  }
+  50% {
+    opacity: 0.1;
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) ; /* 終了時の状態 (通常のサイズと角度) */
+  }
+}
+
+/* is_animated クラスが付与された時のスタイル */
+.yokan_scene.is_animated {
+  /* transition を削除し、@keyframes アニメーションを適用 */
+  animation: yokan_appear 0.8s ease-out forwards; /* アニメーション名 期間 イージング 終了時の状態を維持 */
+  opacity: 1; /* アニメーション終了後の状態を確実に定義 (forwards でも維持されるが明示的に) */
+  transform: scale(1); /* アニメーション終了後の状態を確実に定義 */
+}
+
+.yokan_cube {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  /* ホバー時の回転アニメーション */
+  transition: transform 0.5s ease-in-out; /* 滑らかな回転のためにtransitionを追加/修正 */
+}
+
+/* is_animated クラスが付与された時の .yokan_cube のスタイル */
+/* この初期アニメーションが完了した後の状態からホバーアニメーションが始まる */
+.yokan_cube.is_animated {
+   transform: rotateX(-30deg) rotateY(-45deg); /* アニメーション後の最終状態 */
+}
+
+/* 各面ホバー時の .yokan_cube の回転 */
+
+/* 前面ホバー時 */
+.yokan_cube.hover_front {
+  /* 初期角度 (-30, -45) から少し上に傾ける */
+  transform: rotateX(-15deg) rotateY(-45deg); 
+}
+
+/* 背面ホバー時 */
+.yokan_cube.hover_back {
+  /* 初期角度 (-30, -45) から背面が少し見えるように回転 */
+  transform: rotateX(-30deg) rotateY(135deg); /* 例: 180 - 45 = 135 */
+}
+
+/* 右面ホバー時 */
+.yokan_cube.hover_right {
+  /* 初期角度 (-30, -45) から右面が少し見えるように回転 (Y軸正方向へ) */
+  transform: rotateX(-30deg) rotateY(-60deg); /* 例: -45 + 15 = -30 */
+}
+
+/* 上面ホバー時 */
+.yokan_cube.hover_top {
+  /* 初期角度 (-30, -45) から上面が少し見えるように回転 (X軸正方向へ) */
+  transform: rotateX(-45deg) rotateY(-45deg); /* 例: -30 + 15 = -15 */
+}
+
+/* ホバー時に少し回転させる（任意） - このスタイルは面ごとの回転と競合するため、基本的には不要になります。 */
+/* もし面ごとの回転と組み合わせて使用したい場合は調整が必要です。今回は面ごとの回転を優先します。 */
+/*
+.yokan_cube:hover {
+  transform: rotateX(-25deg) rotateY(-35deg) scale(1.05);
+}
+*/
+
+.yokan_face {
+  position: absolute;
+  background-color: #D2B48C; /* 羊羹の色を可愛らしく変更 (タン) */
+  border: 1px solid #A0522D; /* 縁の色も少し調整 (シエナ) */
+  color: white;
+  font-size: 16px;
+  text-align: center;
+  backface-visibility: hidden; /* 裏面を非表示 */
+  display: flex; /* Flexbox を使用 */
+  justify-content: center; /* 水平中央揃え */
+  align-items: center; /* 垂直中央揃え */
+  transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out; /* ホバー時の変化を滑らかに */
+}
+
+/* 前面 */
+.yokan_face--front {
+  width: 200px;
+  height: 100px;
+  transform: translateZ(50px); /* 奥行きの半分 */
+}
+
+/* 背面 */
+.yokan_face--back {
+  width: 200px;
+  height: 100px;
+  transform: rotateY(180deg) translateZ(50px);
+}
+
+/* 右面 */
+.yokan_face--right {
+  width: 100px; /* 羊羹の奥行き */
+  height: 100px; /* 羊羹の高さ */
+  transform: rotateY(90deg) translateZ(150px); /* ユーザーによる変更箇所: 羊羹の幅の半分が意図なら100px */
+}
+
+/* 上面 */
+.yokan_face--top {
+  width: 200px; /* 羊羹の幅 */
+  height: 100px; /* 羊羹の奥行き */
+  transform: rotateX(90deg) translateZ(50px); /* 羊羹の高さの半分 */
+}
+
+/* ホバー時に枠の色を水色に光らせる */
+.yokan_face:hover {
+  border-color: #00BFFF; /* 水色に */
+  box-shadow: 0 0 10px #00BFFF, 0 0 20px #00BFFF; /* 水色に光る効果 */
+}
+
+/* 集中線 */
+.focus_lines_container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0; /* 初期状態は透明 */
+  transform: scale(0.5); /* 小さくしておく */
+}
+
+/* is_animated クラスが付与された時の .focus_lines_container のスタイル */
+.focus_lines_container.is_animated {
+  animation: focus_lines_fade_in_out 0.8s ease-out forwards; /* アニメーション適用 */
+}
+
+@keyframes focus_lines_fade_in_out {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  20%, 70% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+}
+
+.focus_line {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  background-color: #FFB6C1; /* 集中線の色を可愛らしく変更 (ライトピンク) */
+  transform-origin: bottom center;
+  height: 0; /* 初期状態では高さ0 */
+  opacity: 0; /* 初期状態では透明 */
+}
+
+/* is_animated クラスが付与された時の .focus_line のスタイル */
+.focus_line.is_animated {
+  animation: focus_line_draw 0.8s ease-out forwards; /* アニメーション適用 */
+}
+
+@keyframes focus_line_draw {
+  0% {
+    height: 80px;
+    opacity: 0;
+  }
+  20% {
+    height: 85px; /* 線の長さを短く */
+    opacity: 1;
+  }
+  80% {
+    height: 100px; /* 少し伸びてから消える */
+    opacity: 1;
+  }
+  100% {
+    height: 150px; /* さらに少し伸びてから完全に消える */
+    opacity: 0;
+  }
+} 
