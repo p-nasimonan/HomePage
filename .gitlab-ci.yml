@@ -13,7 +13,7 @@ build_job:
     - web
   script:
     - npm install # または yarn install
-    - npm run build && npm run export # ビルドと静的エクスポートコマンドに合わせて修正してください (例: next build && next export)
+    - npm run build # next.config.jsでoutput: 'export'を設定している場合はこのコマンドで out/ にビルドされます
   artifacts:
     paths:
       - out/ # ビルド成果物ディレクトリを out/ に修正
