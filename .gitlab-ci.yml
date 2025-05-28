@@ -8,7 +8,9 @@ stages:
 # ビルドジョブ
 build_job:
   stage: build
-  image: node:latest # プロジェクトに合わせて適切なNode.jsイメージを選択してください
+  image: node:latest
+  tags:
+    - web
   script:
     - npm install # または yarn install
     - npm run build && npm run export # ビルドと静的エクスポートコマンドに合わせて修正してください (例: next build && next export)
@@ -23,6 +25,9 @@ build_job:
 # デプロイジョブ
 deploy_job:
   stage: deploy
+  tags:
+    - web
+    - ssh
   image: alpine:latest # rsyncとsshコマンドが使える軽量イメージ
   dependencies:
     - build_job # ビルドジョブの成果物に依存
