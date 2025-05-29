@@ -21,7 +21,7 @@
  * - ホバー時の回転角度は固定値です。より滑らかなインタラクションにはJavaScriptアニメーションライブラリが適している場合があります。
  */
 import React, { useEffect, useState } from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled, { keyframes, css } from 'styled-components';
 
 // アニメーションの定義
 const yokanAppear = keyframes`
@@ -73,26 +73,26 @@ const focusLineDraw = keyframes`
 `;
 
 // メインのコンテナ
-export const YokanScene = styled.div<{ isAnimated?: boolean }>`
+export const YokanScene = styled.div<{ $isAnimated?: boolean }>`
   width: 200px;
   height: 100px;
   perspective: 600px;
   margin: auto;
   position: relative;
-  opacity: ${props => props.isAnimated ? 1 : 0};
-  transform: ${props => props.isAnimated ? 'scale(1)' : 'scale(5)'};
-  animation: ${props => props.isAnimated ? `${yokanAppear} 0.8s ease-out forwards` : 'none'};
+  opacity: ${props => props.$isAnimated ? 1 : 0};
+  transform: ${props => props.$isAnimated ? 'scale(1)' : 'scale(5)'};
+  animation: ${props => props.$isAnimated ? css`${yokanAppear} 0.8s ease-out forwards` : 'none'};
 `;
 
 // キューブ本体
-export const YokanCube = styled.div<{ isAnimated?: boolean; hoverFace?: string }>`
+export const YokanCube = styled.div<{ $isAnimated?: boolean; hoverFace?: string }>`
   width: 100%;
   height: 100%;
   position: relative;
   transform-style: preserve-3d;
   transition: transform 0.5s ease-in-out;
   transform: ${props => {
-    if (!props.isAnimated) return 'none';
+    if (!props.$isAnimated) return 'none';
     if (props.hoverFace === 'front') return 'rotateX(-15deg) rotateY(-45deg)';
     if (props.hoverFace === 'back') return 'rotateX(-30deg) rotateY(135deg)';
     if (props.hoverFace === 'right') return 'rotateX(-30deg) rotateY(-60deg)';
@@ -102,7 +102,7 @@ export const YokanCube = styled.div<{ isAnimated?: boolean; hoverFace?: string }
 `;
 
 // キューブの面
-export const YokanFace = styled.div<{ face: 'front' | 'back' | 'right' | 'top' }>`
+export const YokanFace = styled.div<{ $face: 'front' | 'back' | 'right' | 'top' }>`
   position: absolute;
   background-color: #D2B48C;
   border: 1px solid #A0522D;
@@ -121,7 +121,7 @@ export const YokanFace = styled.div<{ face: 'front' | 'back' | 'right' | 'top' }
   }
 
   ${props => {
-    switch (props.face) {
+    switch (props.$face) {
       case 'front':
         return `
           width: 200px;
@@ -151,7 +151,7 @@ export const YokanFace = styled.div<{ face: 'front' | 'back' | 'right' | 'top' }
 `;
 
 // 集中線のコンテナ
-export const FocusLinesContainer = styled.div<{ isAnimated?: boolean }>`
+export const FocusLinesContainer = styled.div<{ $isAnimated?: boolean }>`
   position: absolute;
   top: 50%;
   left: 50%;
@@ -159,13 +159,13 @@ export const FocusLinesContainer = styled.div<{ isAnimated?: boolean }>`
   height: 1px;
   pointer-events: none;
   z-index: -1;
-  opacity: ${props => props.isAnimated ? 1 : 0};
-  transform: ${props => props.isAnimated ? 'scale(1)' : 'scale(0.5)'};
-  animation: ${props => props.isAnimated ? `${focusLinesFadeInOut} 0.8s ease-out forwards` : 'none'};
+  opacity: ${props => props.$isAnimated ? 1 : 0};
+  transform: ${props => props.$isAnimated ? 'scale(1)' : 'scale(0.5)'};
+  animation: ${props => props.$isAnimated ? css`${focusLinesFadeInOut} 0.8s ease-out forwards` : 'none'};
 `;
 
 // 集中線
-export const FocusLine = styled.div<{ isAnimated?: boolean }>`
+export const FocusLine = styled.div<{ $isAnimated?: boolean }>`
   position: absolute;
   bottom: 0;
   left: 50%;
@@ -174,7 +174,7 @@ export const FocusLine = styled.div<{ isAnimated?: boolean }>`
   transform-origin: bottom center;
   height: 0;
   opacity: 0;
-  animation: ${props => props.isAnimated ? `${focusLineDraw} 0.8s ease-out forwards` : 'none'};
+  animation: ${props => props.$isAnimated ? css`${focusLineDraw} 0.8s ease-out forwards` : 'none'};
 `;
 
 /**
@@ -182,55 +182,51 @@ export const FocusLine = styled.div<{ isAnimated?: boolean }>`
  * @returns {React.ReactElement} 直方体のJSX要素
  */
 const YokanCubeComponent: React.FC = () => {
-  const [is_animated, setIsAnimated] = useState(false);
-  const [hovered_face, setHoveredFace] = useState<string | null>(null);
+  const [is_animated, setIsAnimated] = useState<string | undefined>(undefined);
+  const [hovered_face, setHoveredFace] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setIsAnimated(true);
+      setIsAnimated('true');
     }, 100);
 
     return () => clearTimeout(timer);
   }, []);
 
-  const container_classes = `yokan_scene ${is_animated ? 'is_animated' : ''}`;
-  const cube_classes = `yokan_cube ${is_animated ? 'is_animated' : ''} ${hovered_face ? `hover_${hovered_face}` : ''}`;
-  const focus_lines_classes = `focus_lines_container ${is_animated ? 'is_animated' : ''}`;
-
   return (
-    <div className={container_classes}>
-      <div className={focus_lines_classes}>
+    <YokanScene $isAnimated={is_animated === 'true'}>
+      <FocusLinesContainer $isAnimated={is_animated === 'true'}>
         {[...Array(8)].map((_, i) => (
-          <div
+          <FocusLine
             key={i}
-            className={`focus_line ${is_animated ? 'is_animated' : ''}`}
+            $isAnimated={is_animated === 'true'}
             style={{ transform: `translate(-50%, 0) rotate(${i * 45}deg)` }}
           />
         ))}
-      </div>
-      <div className={cube_classes}>
-        <div
-          className="yokan_face yokan_face--front"
+      </FocusLinesContainer>
+      <YokanCube $isAnimated={is_animated === 'true'} hoverFace={hovered_face}>
+        <YokanFace
+          $face="front"
           onMouseEnter={() => setHoveredFace('front')}
-          onMouseLeave={() => setHoveredFace(null)}
-        >前面</div>
-        <div
-          className="yokan_face yokan_face--back"
+          onMouseLeave={() => setHoveredFace(undefined)}
+        >前面</YokanFace>
+        <YokanFace
+          $face="back"
           onMouseEnter={() => setHoveredFace('back')}
-          onMouseLeave={() => setHoveredFace(null)}
-        >背面</div>
-        <div
-          className="yokan_face yokan_face--right"
+          onMouseLeave={() => setHoveredFace(undefined)}
+        >背面</YokanFace>
+        <YokanFace
+          $face="right"
           onMouseEnter={() => setHoveredFace('right')}
-          onMouseLeave={() => setHoveredFace(null)}
-        >右面</div>
-        <div
-          className="yokan_face yokan_face--top"
+          onMouseLeave={() => setHoveredFace(undefined)}
+        >右面</YokanFace>
+        <YokanFace
+          $face="top"
           onMouseEnter={() => setHoveredFace('top')}
-          onMouseLeave={() => setHoveredFace(null)}
-        >上面</div>
-      </div>
-    </div>
+          onMouseLeave={() => setHoveredFace(undefined)}
+        >上面</YokanFace>
+      </YokanCube>
+    </YokanScene>
   );
 };
 
