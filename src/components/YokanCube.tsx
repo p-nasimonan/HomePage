@@ -1,7 +1,14 @@
 'use client';
+import { css, cva, cx } from '../../styled-system/css';
 
-import React, { useEffect, useState } from 'react';
-import { cva } from '../../styled-system/css';
+// YokanCube が受け取るプロップスの型定義
+interface YokanCubeProps {
+  scale?: number;
+  rotateX?: number;
+  rotateY?: number;
+  opacity?: number;
+  // 必要に応じて他のプロップスを追加
+}
 
 // キューブ全体のコンテナのスタイルレシピ (Perspective を含む)
 export const yokanSceneStyles = cva({
@@ -20,35 +27,11 @@ export const yokanSceneStyles = cva({
 export const yokanCubeStyles = cva({
   base: {
     width: '200px', // キューブ本体のサイズ (面のサイズに合わせて調整)
-    height: '200px',
+    height: '200px', // 幅に合わせて修正しました
     position: 'relative',
     transformStyle: 'preserve-3d', // 3D表示に必須
-    transition: 'transform 0.5s ease-in-out', // ホバーアニメーション用
-  },
-  variants: {
-    // アニメーション制御用のバリアント
-    animated: {
-      true: {
-        transform: 'rotateX(-30deg) rotateY(-45deg)',
-        opacity: 1,
-
-        // ホバー時のスタイル（キューブ全体を回転させて拡大）
-        '&:hover': {
-           transform: 'rotateX(0deg) rotateY(0deg) scale(1.2)', // 例: 少し回転させて拡大
-        },
-      },
-      false: {
-        // アニメーション開始時のスタイル
-        transform: 'translateZ(-500px) rotateX(0deg) rotateY(0deg) scale(0.5)', // 例: 奥から小さく出現
-        opacity: 0, // 最初は透明
-        // yokanAppear アニメーションを適用
-        animation: 'yokanAppear 1s ease-out forwards', // forwards でアニメーション終了時の状態を維持
-      },
-    },
-  }, 
-  defaultVariants: {
-      animated: false,
-  },
+    transition: 'transform 0.5s ease-in-out, opacity 0.3s ease-in-out', // ホバーアニメーション用 + 透明度
+  }
 });
 
 // キューブの面のスタイルレシピ
@@ -74,7 +57,7 @@ export const yokanFaceStyles = cva({
         width: '200px', height: '100px', transform: 'rotateY(180deg) translateZ(50px)',
       },
       right: {
-        width: '100px', height: '100px', transform: 'rotateY(90deg) translateZ(150px)', 
+        width: '100px', height: '100px', transform: 'rotateY(90deg) translateZ(150px)',
       },
       left: { // 左面を追加
         width: '100px', height: '100px', transform: 'rotateY(-90deg) translateZ(50px)',
@@ -94,27 +77,30 @@ export const yokanFaceStyles = cva({
 
 
 // 立方体コンポーネント
-export default function YokanCube() {
-   // 登場アニメーションの状態管理
-   const [is_animated, setIsAnimated] = useState<boolean>(false);
-   useEffect(() => {
-     const timer = setTimeout(() => {
-       setIsAnimated(true);
-     }, 100);
-     return () => clearTimeout(timer);
-   }, []);
+export default function YokanCube({ scale = 1, rotateX = 0, rotateY = 0, opacity = 1 }: YokanCubeProps) {
 
-  // ホバーした面の状態管理（必要であれば再度組み込む）
-  // const [hovered_face, setHoveredFace] = useState<string | undefined>(undefined);
+  // プロップスで渡されたスタイルを動的に適用
+  const dynamicPropsStyles = css({
+      // デフォルトの transform は `rotateX(-30deg) rotateY(-45deg)` としました（Animated: true 時の以前の値）
+      // プロップスが渡されない場合はこのデフォルトが適用されます
+      transform: `scale(${scale}) rotateX(${rotateX === 0 && rotateY === 0 && scale === 1 ? -30 : rotateX}deg) rotateY(${rotateX === 0 && rotateY === 0 && scale === 1 ? -45 : rotateY}deg)`,
+      opacity: opacity,
+  });
 
 
   return (
     // YokanScene コンテナ
-    <div className={yokanSceneStyles()}>
+    // YokanCubeScrollList 側で perspective を管理する場合、このコンテナは不要になる可能性あり
+    <div className={yokanSceneStyles()}> {/* または YokanCubeScrollList 側で perspective を持つラッパーを使用 */}
       {/* YokanCube 本体 */}
-      {/* animated バリアントを適用 */}
-      <div className={yokanCubeStyles({ animated: is_animated })}>
+      {/* animated バリアントと動的プロップススタイルを結合 */}
+      {/* animated: false の animation プロパティとプロップスによるスタイルが同時に適用されるが、
+          animation は transform/opacity をアニメーションさせ、プロップスは最終的な値を決定する
+          keyframes の end 状態 (100%) をanimated: true のプロップス適用時のデフォルトと合わせることでスムーズに移行
+      */}
+      <div className={cx(yokanCubeStyles(), dynamicPropsStyles)}> {/* is_animated が false の時に animated: false バリアントを適用 */}
         {/* 各面 */}
+        {/* 面のスタイルは YokanCube 自身が管理 */}
         <div className={yokanFaceStyles({ face: "front" })}>前面</div>
         <div className={yokanFaceStyles({ face: "back" })}>背面</div>
         <div className={yokanFaceStyles({ face: "right" })}>右面</div>
