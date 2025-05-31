@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { css, cva, cx } from '../../styled-system/css';
+import { cva } from '../../styled-system/css';
 
 // キューブ全体のコンテナのスタイルレシピ (Perspective を含む)
 export const yokanSceneStyles = cva({
