@@ -16,7 +16,7 @@ build_job:
     - npm run build # next.config.jsでoutput: 'export'を設定している場合はこのコマンドで out/ にビルドされます
   artifacts:
     paths:
-      - out/ # ビルド成果物ディレクトリを out/ に修正
+      - dist/
     expire_in: 1 week
   only:
     - main # デプロイをトリガーするブランチ名に合わせて修正してください
