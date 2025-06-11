@@ -1,0 +1,154 @@
+---
+/**
+ * @file レトロフラッシュバナーコンポーネント
+ * @description 昭和時代をイメージした点滅するフラッシュバナーコンポーネントです
+ * @author YOUR_NAME
+ * @version 1.0.0
+ */
+---
+
+<div class="retro-banner">
+    <div class="banner-text">
+        <span class="flash-text">★</span>
+        <span class="flash-text delay-1">工</span>
+        <span class="flash-text delay-2">事</span>
+        <span class="flash-text delay-3">中</span>
+        <span class="flash-text delay-4">★</span>
+        <span class="flash-text delay-5">CI/CD</span>
+        <span class="flash-text delay-6">で爆速</span>
+        <span class="flash-text delay-7">開発</span>
+    </div>
+    
+    <div class="construction">
+        <div class="construction-icon">
+            <span class="hammer">🔨</span>
+            <span class="wrench">🔧</span>
+        </div>
+    </div>
+</div>
+
+<style>
+    .retro-banner {
+        position: relative;
+        background: repeating-linear-gradient(
+            -45deg,
+            #ff0 0px,
+            #ff0 10px,
+            #000 10px,
+            #000 20px
+        );
+        color: #fff;
+        text-align: center;
+        padding: 10px 0;
+        font-weight: bold;
+        margin: 20px 0;
+        overflow: hidden;
+    }
+    
+    .banner-text {
+        font-size: 24px;
+        background-color: rgba(0, 0, 0, 0.7);
+        padding: 10px;
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+    }
+    
+    .flash-text {
+        animation: flash 1.2s infinite;
+        display: inline-block;
+        color: #fff;
+        text-shadow: 0 0 5px #fff, 0 0 10px #ff0;
+    }
+    
+    .delay-1 {
+        animation-delay: 0.1s;
+    }
+    
+    .delay-2 {
+        animation-delay: 0.2s;
+    }
+    
+    .delay-3 {
+        animation-delay: 0.3s;
+    }
+    
+    .delay-4 {
+        animation-delay: 0.4s;
+    }
+
+    .delay-5 {
+        animation-delay: 0.5s;
+    }
+    
+    .delay-6 {
+        animation-delay: 0.6s;
+    }
+
+    .delay-7 {
+        animation-delay: 0.7s;
+    }
+    
+    @keyframes flash {
+        0%, 50%, 100% {
+            opacity: 1;
+        }
+        25%, 75% {
+            opacity: 0.3;
+        }
+    }
+    
+    .construction {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+    
+    .construction-icon {
+        position: relative;
+        width: 40px;
+        height: 40px;
+    }
+    
+    .hammer, .wrench {
+        position: absolute;
+        font-size: 24px;
+    }
+    
+    .hammer {
+        animation: moveHammer 2s infinite;
+        transform-origin: bottom right;
+    }
+    
+    .wrench {
+        top: 5px;
+        left: 5px;
+        animation: rotateWrench 3s infinite;
+        transform-origin: center;
+    }
+    
+    @keyframes moveHammer {
+        0%, 100% {
+            transform: rotate(0);
+        }
+        50% {
+            transform: rotate(-30deg);
+        }
+    }
+    
+    @keyframes rotateWrench {
+        0%, 100% {
+            transform: rotate(0);
+        }
+        50% {
+            transform: rotate(180deg);
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .construction {
+            display: none;
+        }
+    }
+</style> 

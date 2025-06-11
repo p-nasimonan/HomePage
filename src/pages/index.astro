@@ -1,0 +1,162 @@
+---
+/**
+ * @file 昭和風ようかんホームページ
+ * @description 昭和時代風のデザインを取り入れたようかんのホームページです
+ * @author YOUR_NAME
+ * @version 1.0.0
+ */
+import Layout from '../layouts/Layout.astro';
+import Profile from '../components/Profile.astro';
+import RetroBanner from '../components/RetroBanner.astro';
+import AccessCounter from '../components/AccessCounter.astro';
+import Yokan3D from '../components/Yokan3D.astro';
+---
+
+<Layout>
+	<main>
+		<div class="welcome-banner">
+			<h1 class="retro-heading">
+				<span class="decoration">★彡</span>
+				ようかんのホームページ
+				<span class="decoration">彡★</span>
+			</h1>
+			<p class="welcome-text">ようこそ！お越しいただきありがとうございます。</p>
+		</div>
+
+		<RetroBanner />
+		
+		<div class="yokan-container">
+			<Yokan3D 
+				title="ブログ" 
+				link="/blog" 
+			/>	
+			<Yokan3D 
+				title="作品" 
+				link="https://ie.u-ryukyu.ac.jp/~e245719" 
+			/>
+		</div>
+		
+		<Profile />
+		
+		<AccessCounter />
+		
+		<div class="guestbook retro-box">
+			<h2 class="section-title">
+				<span class="retro-decoration">✎</span>
+				掲示板
+				<span class="retro-decoration">✎</span>
+			</h2>
+			<div class="message">
+				<div class="message-header">
+					<span class="message-name">匿名さん</span>
+					<span class="message-date">2023年12月1日 13:24</span>
+				</div>
+				<div class="message-body">
+					素敵なホームページですね！また遊びに来ます。
+				</div>
+			</div>
+			<div class="message">
+				<div class="message-header">
+					<span class="message-name">ようかん好きさん</span>
+					<span class="message-date">2023年11月28日 18:05</span>
+				</div>
+				<div class="message-body">
+					昭和の雰囲気が懐かしいです。ようかんについて語りたいですね！
+				</div>
+			</div>
+		</div>
+	</main>
+</Layout>
+
+<style>
+	main {
+		padding: 20px 0;
+	}
+	
+	.welcome-banner {
+		text-align: center;
+		margin-bottom: 30px;
+	}
+	
+	.retro-heading {
+		font-size: 32px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-bottom: 10px;
+		font-family: 'DotGothic16', sans-serif;
+		font-weight: bold;
+		background: linear-gradient(
+			to right,
+			#ff0000,
+			#ff7f00,
+			#ffff00,
+			#00ff00,
+			#0000ff,
+			#4b0082,
+			#9400d3
+		);
+		-webkit-background-clip: text;
+		background-clip: text;
+		color: transparent;
+		text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+		animation: rainbow 3s linear infinite;
+	}
+	
+	@keyframes rainbow {
+		0% { filter: hue-rotate(0deg); }
+		100% { filter: hue-rotate(360deg); }
+	}
+	
+	.decoration {
+		margin: 0 10px;
+	}
+	
+	.welcome-text {
+		font-size: 18px;
+		font-weight: bold;
+	}
+	
+	.yokan-container {
+		width: auto;
+		margin:	20px auto;
+		display: flex;
+	}
+	
+
+	.guestbook {
+		margin-top: 40px;
+	}
+	
+	.message {
+		border-bottom: 1px dashed var(--retro-border-color);
+		padding: 15px 0;
+	}
+	
+	.message:last-child {
+		border-bottom: none;
+	}
+	
+	.message-header {
+		display: flex;
+		justify-content: space-between;
+		margin-bottom: 5px;
+		font-size: 0.9em;
+	}
+	
+	.message-name {
+		font-weight: bold;
+		color: var(--retro-secondary-color);
+	}
+	
+	.message-date {
+		color: #777;
+	}
+	
+	.message-body {
+		background-color: #f9f9f9;
+		padding: 10px;
+		border-radius: 0;
+		border-left: 3px solid var(--retro-border-color);
+	}
+</style>

@@ -1,0 +1,164 @@
+---
+/**
+ * @file 3Dようかんコンポーネント
+ * @description CSS 3Dトランスフォームを使用した立体的なようかんを表現するコンポーネント
+ * @author YOUR_NAME
+ * @version 1.0.0
+ */
+interface Props {
+    title: string;
+    link: string;
+}
+
+const { title, link } = Astro.props;
+---
+
+<a href={link} class="yokan-3d-container">
+    <div class="yokan-3d">
+        <div class="yokan-face front">
+            <span class="yokan-text">{title}</span>
+        </div>
+        <div class="yokan-face back">
+            <span class="yokan-text">{title}</span>
+        </div>
+        <div class="yokan-face right">
+            <span class="yokan-text">{title}</span>
+        </div>
+        <div class="yokan-face left">
+            <span class="yokan-text">{title}</span>
+        </div>
+        <div class="yokan-face top">
+            <span class="yokan-text">{title}</span>
+        </div>
+        <div class="yokan-face bottom">
+            <span class="yokan-text">{title}</span>
+        </div>
+    </div>
+</a>
+
+<style>
+    .yokan-3d-container {
+        width: 200px;
+        height: 100px;
+        margin: 40px auto;
+        perspective: 1000px;
+        display: block;
+        transition: all 0.3s ease;
+    }
+
+    .yokan-3d {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        transform-style: preserve-3d;
+        animation: float 3s ease-in-out infinite;
+        transition: transform 1s ease;
+    }
+
+    .yokan-3d-container:hover .yokan-3d {
+        animation: none;
+    }
+
+    .yokan-face {
+        position: absolute;
+        width: 200px;
+        height: 100px;
+        background-color: #D2B48C;
+        border: 2px solid #8B4513;
+        box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #5D4037;
+        font-family: 'DotGothic16', sans-serif;
+        font-weight: bold;
+        font-size: 1.2em;
+        text-shadow: 1px 1px 0 rgba(255,255,255,0.5);
+        transition: all 0.3s ease;
+    }
+
+    .yokan-text {
+        transform: translateZ(20px);
+        text-align: center;
+        padding: 10px;
+    }
+
+    .front {
+        transform: translateZ(50px);
+    }
+
+    .back {
+        transform: translateZ(-50px) rotateY(180deg);
+    }
+
+    .right {
+        transform: translateX(150px) rotateY(90deg);
+        width: 100px;
+    }
+
+    .left {
+        transform: translateX(-50px) rotateY(-90deg);
+        width: 100px;
+    }
+
+    .top {
+        transform: translateY(-50px) rotateX(90deg);
+        height: 100px;
+    }
+
+    .bottom {
+        transform: translateY(50px) rotateX(-90deg);
+        height: 100px;
+    }
+
+    /* ようかんの模様 */
+    .yokan-face::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+            45deg,
+            transparent 45%,
+            rgba(139, 69, 19, 0.1) 45%,
+            rgba(139, 69, 19, 0.1) 55%,
+            transparent 55%
+        );
+        background-size: 20px 20px;
+        pointer-events: none;
+    }
+
+    /* 浮遊アニメーション */
+    @keyframes float {
+        0%, 100% {
+            transform: translateY(0) rotateY(-280deg) rotateX(-120deg);
+        }
+        50% {
+            transform: translateY(-10px) rotateY(100deg) rotateX(30deg) rotateZ(20deg);
+        }
+    }
+
+    /* ホバーエフェクトを削除 */
+    .yokan-3d-container:hover .yokan-face {
+        background-color: #31a1cd;
+    }
+
+    /* 光沢効果 */
+    .yokan-face::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.2) 0%,
+            transparent 50%,
+            rgba(0, 0, 0, 0.1) 100%
+        );
+        pointer-events: none;
+    }
+</style> 
