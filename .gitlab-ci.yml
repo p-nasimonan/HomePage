@@ -34,8 +34,8 @@ deploy_job:
   script:
     # rsyncコマンドでデプロイ
     # -z: 圧縮転送, -a: アーカイブモード (パーミッションなどを維持), -v: 詳細表示, --delete: 転送元にないファイルを転送先から削除
-    - rsync -zav --delete out/ ubuntu:/var/www/youkan.uk/
-      # ^^^ # ビルド成果物ディレクトリのパスを out/ に修正
+    - rsync -zav --delete dist/ ubuntu:/var/www/youkan.uk/
+      # ^^^ # ビルド成果物ディレクトリのパスを dist/ に修正
       #     ^^^^^^^^^^^ # デプロイ先のサーバーユーザーとホスト名を直接指定 (必要に応じて環境変数に戻してください)
       #                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ # デプロイ先のパス
   only:
