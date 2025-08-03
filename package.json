@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "scripts": {
     "prepare": "panda codegen && panda",
-    "dev": "astro dev",
+    "dev": "astro dev && panda -w",
     "dev:panda": "panda -w",
     "dev:astro": "astro dev",
     "dev:test": "vitest --ui",

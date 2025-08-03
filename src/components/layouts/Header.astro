@@ -1,0 +1,263 @@
+---
+import { css } from '../../styled-system/css';
+
+export interface Props {
+  currentPage?: 'home' | 'blog' | 'anko-ui';
+}
+
+const { currentPage = 'home' } = Astro.props;
+---
+
+<header class={css({
+  background: 'white',
+  boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+  position: 'sticky',
+  top: '0',
+  zIndex: '100'
+})}>
+  <div class={css({
+    maxWidth: '1200px',
+    margin: '0 auto',
+    padding: '0 20px'
+  })}>
+    <div class={css({
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      padding: '1rem 0',
+      '@media (max-width: 768px)': {
+        padding: '0.75rem 0'
+      }
+    })}>
+      <h1 class={css({
+        fontSize: '1.5rem',
+        fontWeight: 'bold',
+        margin: '0',
+        '@media (max-width: 768px)': {
+          fontSize: '1.25rem'
+        }
+      })}>
+        <a href="/" class={css({
+          color: 'teal.500',
+          textDecoration: 'none'
+        })}>ようかん</a>
+      </h1>
+
+      <!-- デスクトップナビゲーション -->
+      <nav class={css({
+        display: 'block',
+        '@media (max-width: 768px)': {
+          display: 'none'
+        }
+      })}>
+        <ul class={css({
+          display: 'flex',
+          listStyle: 'none',
+          gap: '2rem',
+          margin: '0',
+          padding: '0'
+        })}>
+          <li>
+            <a href="/" class={css({
+              textDecoration: 'none',
+              color: currentPage === 'home' ? 'teal.500' : 'gray.900',
+              fontWeight: '500',
+              transition: 'color 0.3s',
+              _hover: { color: 'teal.500' }
+            })}>
+              ホーム
+            </a>
+          </li>
+          <li>
+            <a href="/blog" class={css({
+              textDecoration: 'none',
+              color: currentPage === 'blog' ? 'teal.500' : 'gray.900',
+              fontWeight: '500',
+              transition: 'color 0.3s',
+              _hover: { color: 'teal.500' }
+            })}>
+              ブログ
+            </a>
+          </li>
+          <li class={css({ position: 'relative' })} 
+              onmouseover="this.querySelector('.anko-ui-dropdown').style.display='block'" 
+              onmouseout="this.querySelector('.anko-ui-dropdown').style.display='none'">
+            <a href="/anko-ui" class={css({
+              textDecoration: 'none',
+              color: currentPage === 'anko-ui' ? 'teal.500' : 'gray.900',
+              fontWeight: '500',
+              transition: 'color 0.3s',
+              _hover: { color: 'teal.500' }
+            })}>
+              Anko-UI
+            </a>
+            <div class="anko-ui-dropdown" style="display: none;" class={css({
+              position: 'absolute',
+              top: '100%',
+              left: '0',
+              minWidth: '150px',
+              background: 'white',
+              border: '1px solid',
+              borderColor: 'gray.200',
+              borderRadius: '8px',
+              boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+              zIndex: '10',
+              marginTop: '0.5rem'
+            })}>
+              <a href="/anko-ui" class={css({
+                display: 'block',
+                padding: '0.75rem 1rem',
+                color: 'gray.700',
+                textDecoration: 'none',
+                borderBottom: '1px solid',
+                borderColor: 'gray.100',
+                transition: 'background 0.2s',
+                _hover: { background: 'gray.50' }
+              })}>
+                はじめに
+              </a>
+              <a href="/anko-ui/docs" class={css({
+                display: 'block',
+                padding: '0.75rem 1rem',
+                color: 'gray.700',
+                textDecoration: 'none',
+                borderBottom: '1px solid',
+                borderColor: 'gray.100',
+                transition: 'background 0.2s',
+                _hover: { background: 'gray.50' }
+              })}>
+                ドキュメント
+              </a>
+              <a href="/anko-ui/playground" class={css({
+                display: 'block',
+                padding: '0.75rem 1rem',
+                color: 'gray.700',
+                textDecoration: 'none',
+                transition: 'background 0.2s',
+                _hover: { background: 'gray.50' }
+              })}>
+                プレイグラウンド
+              </a>
+            </div>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- モバイルメニューボタン -->
+      <button 
+        id="mobile-menu-button"
+        class={css({
+          display: 'none',
+          background: 'transparent',
+          border: 'none',
+          padding: '0.5rem',
+          cursor: 'pointer',
+          '@media (max-width: 768px)': {
+            display: 'block'
+          }
+        })}
+        onclick="toggleMobileMenu()"
+      >
+        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+      </button>
+    </div>
+
+    <!-- モバイルナビゲーション -->
+    <nav 
+      id="mobile-menu"
+      class={css({
+        display: 'none',
+        '@media (max-width: 768px)': {
+          borderTop: '1px solid',
+          borderColor: 'gray.200',
+          paddingTop: '1rem',
+          paddingBottom: '1rem'
+        }
+      })}
+      style="display: none;"
+    >
+      <ul class={css({
+        listStyle: 'none',
+        margin: '0',
+        padding: '0',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '1rem'
+      })}>
+        <li>
+          <a href="/" class={css({
+            textDecoration: 'none',
+            color: currentPage === 'home' ? 'teal.500' : 'gray.900',
+            fontWeight: '500',
+            fontSize: '1.1rem',
+            display: 'block',
+            padding: '0.5rem 0'
+          })}>
+            ホーム
+          </a>
+        </li>
+        <li>
+          <a href="/blog" class={css({
+            textDecoration: 'none',
+            color: currentPage === 'blog' ? 'teal.500' : 'gray.900',
+            fontWeight: '500',
+            fontSize: '1.1rem',
+            display: 'block',
+            padding: '0.5rem 0'
+          })}>
+            ブログ
+          </a>
+        </li>
+        <li>
+          <a href="/anko-ui" class={css({
+            textDecoration: 'none',
+            color: currentPage === 'anko-ui' ? 'teal.500' : 'gray.900',
+            fontWeight: '500',
+            fontSize: '1.1rem',
+            display: 'block',
+            padding: '0.5rem 0'
+          })}>
+            Anko-UI
+          </a>
+        </li>
+        <li class={css({ marginLeft: '1rem' })}>
+          <a href="/anko-ui/docs" class={css({
+            textDecoration: 'none',
+            color: 'gray.600',
+            fontSize: '1rem',
+            display: 'block',
+            padding: '0.25rem 0'
+          })}>
+            ドキュメント
+          </a>
+        </li>
+        <li class={css({ marginLeft: '1rem' })}>
+          <a href="/anko-ui/playground" class={css({
+            textDecoration: 'none',
+            color: 'gray.600',
+            fontSize: '1rem',
+            display: 'block',
+            padding: '0.25rem 0'
+          })}>
+            プレイグラウンド
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<script>
+  function toggleMobileMenu() {
+    const menu = document.getElementById('mobile-menu');
+    if (menu) {
+      if (menu.style.display === 'none' || menu.style.display === '') {
+        menu.style.display = 'block';
+      } else {
+        menu.style.display = 'none';
+      }
+    }
+  }
+</script>
