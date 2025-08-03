@@ -1,5 +1,5 @@
 /**
- * Youkan Design System
+ * Anko-UI Design System
  * Panda CSS プリセット形式のデザインシステム
  */
 
@@ -13,7 +13,7 @@ import * as typographies from "./tokens/typography.ts";
 import { buttonRecipe, badgeRecipe, cardRecipe, postCardRecipe, postCardSlotRecipe } from "./recipes";
 
 export default definePreset({
-  name: "youkan-design-system",
+  name: "anko-ui",
   theme: {
     tokens: defu(
       {},
@@ -88,7 +88,7 @@ export default definePreset({
 /**
  * ライブラリバージョン
  */
-export const DESIGN_SYSTEM_VERSION = '2.0.0' as const;
+export const ANKO_UI_VERSION = '1.0.0' as const;
 
 // 従来のエクスポート（後方互換性）
 export * from './tokens';

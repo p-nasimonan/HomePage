@@ -1,0 +1,695 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { css } from '../../styled-system/css';
+import { button } from '../../styled-system/recipes';
+import { badge } from '../../styled-system/recipes';
+import { card } from '../../styled-system/recipes';
+import '../../styled-system/styles.css';
+---
+
+<Layout title="Anko-UI Playground">
+  <div class={css({
+    minHeight: '100vh',
+    background: 'gray.50'
+  })}>
+    <!-- ヘッダー -->
+    <header class={css({
+      background: 'white',
+      borderBottom: '1px solid',
+      borderColor: 'gray.200',
+      padding: '1rem 0'
+    })}>
+      <div class={css({
+        maxWidth: '1200px',
+        margin: '0 auto',
+        padding: '0 2rem',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+      })}>
+        <h1 class={css({
+          fontSize: '2rem',
+          fontWeight: 'bold',
+          color: 'gray.900'
+        })}>
+          Anko-UI Playground
+        </h1>
+        <a href="/anko-ui/docs" class={button({ variant: 'outline' })}>
+          ドキュメント
+        </a>
+      </div>
+    </header>
+
+    <div class={css({
+      maxWidth: '1200px',
+      margin: '0 auto',
+      padding: '2rem'
+    })}>
+      <!-- ボタンサンプル -->
+      <section class={css({ marginBottom: '3rem' })}>
+        <h2 class={css({
+          fontSize: '1.5rem',
+          fontWeight: 'bold',
+          marginBottom: '1rem',
+          color: 'gray.900'
+        })}>
+          ボタン
+        </h2>
+        <div class={css({
+          background: 'white',
+          padding: '2rem',
+          borderRadius: '12px',
+          boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+          border: '1px solid',
+          borderColor: 'gray.200',
+          marginBottom: '1rem'
+        })}>
+          <h3 class={css({
+            fontSize: '1.1rem',
+            fontWeight: 'semibold',
+            marginBottom: '1rem',
+            color: 'gray.800'
+          })}>
+            バリアント
+          </h3>
+          <div class={css({
+            display: 'flex',
+            gap: '1rem',
+            flexWrap: 'wrap',
+            marginBottom: '2rem'
+          })}>
+            <button class={button({ variant: 'primary' })}>Primary</button>
+            <button class={button({ variant: 'secondary' })}>Secondary</button>
+            <button class={button({ variant: 'outline' })}>Outline</button>
+            <button class={button({ variant: 'ghost' })}>Ghost</button>
+          </div>
+
+          <h3 class={css({
+            fontSize: '1.1rem',
+            fontWeight: 'semibold',
+            marginBottom: '1rem',
+            color: 'gray.800'
+          })}>
+            サイズ
+          </h3>
+          <div class={css({
+            display: 'flex',
+            gap: '1rem',
+            flexWrap: 'wrap',
+            alignItems: 'center',
+            marginBottom: '2rem'
+          })}>
+            <button class={button({ variant: 'primary', size: 'sm' })}>Small</button>
+            <button class={button({ variant: 'primary', size: 'md' })}>Medium</button>
+            <button class={button({ variant: 'primary', size: 'lg' })}>Large</button>
+          </div>
+
+          <h3 class={css({
+            fontSize: '1.1rem',
+            fontWeight: 'semibold',
+            marginBottom: '1rem',
+            color: 'gray.800'
+          })}>
+            組み合わせ
+          </h3>
+          <div class={css({
+            display: 'flex',
+            gap: '1rem',
+            flexWrap: 'wrap',
+            alignItems: 'center'
+          })}>
+            <button class={button({ variant: 'outline', size: 'sm' })}>Small Outline</button>
+            <button class={button({ variant: 'secondary', size: 'lg' })}>Large Secondary</button>
+            <button class={button({ variant: 'ghost', size: 'md' })}>Medium Ghost</button>
+          </div>
+        </div>
+        <details class={css({
+          background: 'white',
+          padding: '1rem',
+          borderRadius: '8px',
+          border: '1px solid',
+          borderColor: 'gray.200'
+        })}>
+          <summary class={css({
+            cursor: 'pointer',
+            fontWeight: 'medium',
+            color: 'gray.700',
+            marginBottom: '1rem'
+          })}>
+            コードを表示
+          </summary>
+          <div class={css({
+            background: 'gray.900',
+            color: 'gray.100',
+            padding: '1rem',
+            borderRadius: '6px',
+            fontFamily: 'mono',
+            fontSize: '0.85rem',
+            overflow: 'auto'
+          })}>
+            <pre><code>{`<button class={button({ variant: 'primary' })}>Primary</button>
+<button class={button({ variant: 'secondary' })}>Secondary</button>
+<button class={button({ variant: 'outline' })}>Outline</button>
+<button class={button({ variant: 'ghost' })}>Ghost</button>
+
+<button class={button({ variant: 'primary', size: 'sm' })}>Small</button>
+<button class={button({ variant: 'primary', size: 'md' })}>Medium</button>
+<button class={button({ variant: 'primary', size: 'lg' })}>Large</button>`}</code></pre>
+          </div>
+        </details>
+      </section>
+
+      <!-- バッジサンプル -->
+      <section class={css({ marginBottom: '3rem' })}>
+        <h2 class={css({
+          fontSize: '1.5rem',
+          fontWeight: 'bold',
+          marginBottom: '1rem',
+          color: 'gray.900'
+        })}>
+          バッジ
+        </h2>
+        <div class={css({
+          background: 'white',
+          padding: '2rem',
+          borderRadius: '12px',
+          boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+          border: '1px solid',
+          borderColor: 'gray.200',
+          marginBottom: '1rem'
+        })}>
+          <h3 class={css({
+            fontSize: '1.1rem',
+            fontWeight: 'semibold',
+            marginBottom: '1rem',
+            color: 'gray.800'
+          })}>
+            バリアント
+          </h3>
+          <div class={css({
+            display: 'flex',
+            gap: '1rem',
+            flexWrap: 'wrap',
+            marginBottom: '2rem',
+            alignItems: 'center'
+          })}>
+            <span class={badge({ variant: 'primary' })}>Primary</span>
+            <span class={badge({ variant: 'secondary' })}>Secondary</span>
+            <span class={badge({ variant: 'mint' })}>Mint</span>
+            <span class={badge({ variant: 'cream' })}>Cream</span>
+            <span class={badge({ variant: 'outline' })}>Outline</span>
+          </div>
+
+          <h3 class={css({
+            fontSize: '1.1rem',
+            fontWeight: 'semibold',
+            marginBottom: '1rem',
+            color: 'gray.800'
+          })}>
+            サイズ
+          </h3>
+          <div class={css({
+            display: 'flex',
+            gap: '1rem',
+            flexWrap: 'wrap',
+            alignItems: 'center'
+          })}>
+            <span class={badge({ variant: 'primary', size: 'sm' })}>Small</span>
+            <span class={badge({ variant: 'primary', size: 'md' })}>Medium</span>
+            <span class={badge({ variant: 'primary', size: 'lg' })}>Large</span>
+          </div>
+        </div>
+        <details class={css({
+          background: 'white',
+          padding: '1rem',
+          borderRadius: '8px',
+          border: '1px solid',
+          borderColor: 'gray.200'
+        })}>
+          <summary class={css({
+            cursor: 'pointer',
+            fontWeight: 'medium',
+            color: 'gray.700',
+            marginBottom: '1rem'
+          })}>
+            コードを表示
+          </summary>
+          <div class={css({
+            background: 'gray.900',
+            color: 'gray.100',
+            padding: '1rem',
+            borderRadius: '6px',
+            fontFamily: 'mono',
+            fontSize: '0.85rem',
+            overflow: 'auto'
+          })}>
+            <pre><code>{`<span class={badge({ variant: 'primary' })}>Primary</span>
+<span class={badge({ variant: 'secondary' })}>Secondary</span>
+<span class={badge({ variant: 'mint' })}>Mint</span>
+<span class={badge({ variant: 'cream' })}>Cream</span>
+<span class={badge({ variant: 'outline' })}>Outline</span>
+
+<span class={badge({ variant: 'primary', size: 'sm' })}>Small</span>
+<span class={badge({ variant: 'primary', size: 'md' })}>Medium</span>
+<span class={badge({ variant: 'primary', size: 'lg' })}>Large</span>`}</code></pre>
+          </div>
+        </details>
+      </section>
+
+      <!-- カードサンプル -->
+      <section class={css({ marginBottom: '3rem' })}>
+        <h2 class={css({
+          fontSize: '1.5rem',
+          fontWeight: 'bold',
+          marginBottom: '1rem',
+          color: 'gray.900'
+        })}>
+          カード
+        </h2>
+        <div class={css({
+          background: 'white',
+          padding: '2rem',
+          borderRadius: '12px',
+          boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+          border: '1px solid',
+          borderColor: 'gray.200',
+          marginBottom: '1rem'
+        })}>
+          <div class={css({
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+            gap: '1.5rem',
+            marginBottom: '2rem'
+          })}>
+            <div class={card({ variant: 'default' })}>
+              <h3 class={css({
+                fontSize: '1.2rem',
+                fontWeight: 'semibold',
+                marginBottom: '0.5rem',
+                color: 'gray.900'
+              })}>
+                デフォルトカード
+              </h3>
+              <p class={css({
+                color: 'gray.600',
+                lineHeight: '1.5',
+                marginBottom: '1rem'
+              })}>
+                これは標準的なカードコンポーネントです。コンテンツを整理して表示するのに適しています。
+              </p>
+              <button class={button({ variant: 'primary', size: 'sm' })}>
+                詳細を見る
+              </button>
+            </div>
+
+            <div class={card({ variant: 'elevated' })}>
+              <h3 class={css({
+                fontSize: '1.2rem',
+                fontWeight: 'semibold',
+                marginBottom: '0.5rem',
+                color: 'gray.900'
+              })}>
+                エレベーテッドカード
+              </h3>
+              <p class={css({
+                color: 'gray.600',
+                lineHeight: '1.5',
+                marginBottom: '1rem'
+              })}>
+                より強調されたシャドウを持つカードです。重要な情報を目立たせたい場合に使用します。
+              </p>
+              <div class={css({
+                display: 'flex',
+                gap: '0.5rem'
+              })}>
+                <span class={badge({ variant: 'mint', size: 'sm' })}>新着</span>
+                <span class={badge({ variant: 'primary', size: 'sm' })}>人気</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <details class={css({
+          background: 'white',
+          padding: '1rem',
+          borderRadius: '8px',
+          border: '1px solid',
+          borderColor: 'gray.200'
+        })}>
+          <summary class={css({
+            cursor: 'pointer',
+            fontWeight: 'medium',
+            color: 'gray.700',
+            marginBottom: '1rem'
+          })}>
+            コードを表示
+          </summary>
+          <div class={css({
+            background: 'gray.900',
+            color: 'gray.100',
+            padding: '1rem',
+            borderRadius: '6px',
+            fontFamily: 'mono',
+            fontSize: '0.85rem',
+            overflow: 'auto'
+          })}>
+            <pre><code>{`<div class={card({ variant: 'default' })}>
+  <h3>カードタイトル</h3>
+  <p>カードの内容...</p>
+  <button class={button({ variant: 'primary', size: 'sm' })}>
+    詳細を見る
+  </button>
+</div>
+
+<div class={card({ variant: 'elevated' })}>
+  <h3>エレベーテッドカード</h3>
+  <p>より強調されたカード...</p>
+  <div>
+    <span class={badge({ variant: 'mint', size: 'sm' })}>新着</span>
+    <span class={badge({ variant: 'primary', size: 'sm' })}>人気</span>
+  </div>
+</div>`}</code></pre>
+          </div>
+        </details>
+      </section>
+
+      <!-- カラーパレット -->
+      <section class={css({ marginBottom: '3rem' })}>
+        <h2 class={css({
+          fontSize: '1.5rem',
+          fontWeight: 'bold',
+          marginBottom: '1rem',
+          color: 'gray.900'
+        })}>
+          カラーパレット
+        </h2>
+        <div class={css({
+          background: 'white',
+          padding: '2rem',
+          borderRadius: '12px',
+          boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+          border: '1px solid',
+          borderColor: 'gray.200',
+          marginBottom: '1rem'
+        })}>
+          <div class={css({
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+            gap: '1.5rem'
+          })}>
+            <!-- Teal Palette -->
+            <div>
+              <h3 class={css({
+                fontSize: '1.1rem',
+                fontWeight: 'semibold',
+                marginBottom: '1rem',
+                color: 'gray.800'
+              })}>
+                Teal
+              </h3>
+              <div class={css({
+                display: 'grid',
+                gridTemplateColumns: 'repeat(5, 1fr)',
+                gap: '0.5rem',
+                marginBottom: '1rem'
+              })}>
+                <div class={css({
+                  background: 'teal.100',
+                  height: '3rem',
+                  borderRadius: '6px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '0.75rem',
+                  fontWeight: 'medium',
+                  color: 'gray.800'
+                })}>
+                  100
+                </div>
+                <div class={css({
+                  background: 'teal.300',
+                  height: '3rem',
+                  borderRadius: '6px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '0.75rem',
+                  fontWeight: 'medium',
+                  color: 'white'
+                })}>
+                  300
+                </div>
+                <div class={css({
+                  background: 'teal.500',
+                  height: '3rem',
+                  borderRadius: '6px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '0.75rem',
+                  fontWeight: 'medium',
+                  color: 'white'
+                })}>
+                  500
+                </div>
+                <div class={css({
+                  background: 'teal.700',
+                  height: '3rem',
+                  borderRadius: '6px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '0.75rem',
+                  fontWeight: 'medium',
+                  color: 'white'
+                })}>
+                  700
+                </div>
+                <div class={css({
+                  background: 'teal.900',
+                  height: '3rem',
+                  borderRadius: '6px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '0.75rem',
+                  fontWeight: 'medium',
+                  color: 'white'
+                })}>
+                  900
+                </div>
+              </div>
+            </div>
+
+            <!-- Mint Palette -->
+            <div>
+              <h3 class={css({
+                fontSize: '1.1rem',
+                fontWeight: 'semibold',
+                marginBottom: '1rem',
+                color: 'gray.800'
+              })}>
+                Mint
+              </h3>
+              <div class={css({
+                display: 'grid',
+                gridTemplateColumns: 'repeat(5, 1fr)',
+                gap: '0.5rem',
+                marginBottom: '1rem'
+              })}>
+                <div class={css({
+                  background: 'mint.100',
+                  height: '3rem',
+                  borderRadius: '6px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '0.75rem',
+                  fontWeight: 'medium',
+                  color: 'gray.800'
+                })}>
+                  100
+                </div>
+                <div class={css({
+                  background: 'mint.300',
+                  height: '3rem',
+                  borderRadius: '6px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '0.75rem',
+                  fontWeight: 'medium',
+                  color: 'white'
+                })}>
+                  300
+                </div>
+                <div class={css({
+                  background: 'mint.500',
+                  height: '3rem',
+                  borderRadius: '6px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '0.75rem',
+                  fontWeight: 'medium',
+                  color: 'white'
+                })}>
+                  500
+                </div>
+                <div class={css({
+                  background: 'mint.700',
+                  height: '3rem',
+                  borderRadius: '6px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '0.75rem',
+                  fontWeight: 'medium',
+                  color: 'white'
+                })}>
+                  700
+                </div>
+                <div class={css({
+                  background: 'mint.900',
+                  height: '3rem',
+                  borderRadius: '6px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '0.75rem',
+                  fontWeight: 'medium',
+                  color: 'white'
+                })}>
+                  900
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- インタラクティブデモ -->
+      <section class={css({ marginBottom: '3rem' })}>
+        <h2 class={css({
+          fontSize: '1.5rem',
+          fontWeight: 'bold',
+          marginBottom: '1rem',
+          color: 'gray.900'
+        })}>
+          インタラクティブデモ
+        </h2>
+        <div class={css({
+          background: 'white',
+          padding: '2rem',
+          borderRadius: '12px',
+          boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+          border: '1px solid',
+          borderColor: 'gray.200'
+        })}>
+          <p class={css({
+            color: 'gray.600',
+            marginBottom: '2rem',
+            lineHeight: '1.6'
+          })}>
+            以下は実際のコンポーネントを組み合わせたデモです。
+          </p>
+          <div class={css({
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+            gap: '1.5rem'
+          })}>
+            <div class={card({ variant: 'elevated' })}>
+              <div class={css({
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'start',
+                marginBottom: '1rem'
+              })}>
+                <h3 class={css({
+                  fontSize: '1.2rem',
+                  fontWeight: 'semibold',
+                  color: 'gray.900'
+                })}>
+                  プロジェクト A
+                </h3>
+                <span class={badge({ variant: 'mint', size: 'sm' })}>完了</span>
+              </div>
+              <p class={css({
+                color: 'gray.600',
+                lineHeight: '1.5',
+                marginBottom: '1.5rem'
+              })}>
+                Anko-UIを使用した新しいWebアプリケーションの開発プロジェクトです。
+              </p>
+              <div class={css({
+                display: 'flex',
+                gap: '0.5rem',
+                marginBottom: '1.5rem',
+                flexWrap: 'wrap'
+              })}>
+                <span class={badge({ variant: 'primary', size: 'sm' })}>React</span>
+                <span class={badge({ variant: 'secondary', size: 'sm' })}>TypeScript</span>
+                <span class={badge({ variant: 'cream', size: 'sm' })}>Panda CSS</span>
+              </div>
+              <div class={css({
+                display: 'flex',
+                gap: '0.75rem'
+              })}>
+                <button class={button({ variant: 'primary', size: 'sm' })}>
+                  詳細を見る
+                </button>
+                <button class={button({ variant: 'outline', size: 'sm' })}>
+                  編集
+                </button>
+              </div>
+            </div>
+
+            <div class={card({ variant: 'default' })}>
+              <div class={css({
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'start',
+                marginBottom: '1rem'
+              })}>
+                <h3 class={css({
+                  fontSize: '1.2rem',
+                  fontWeight: 'semibold',
+                  color: 'gray.900'
+                })}>
+                  プロジェクト B
+                </h3>
+                <span class={badge({ variant: 'cream', size: 'sm' })}>進行中</span>
+              </div>
+              <p class={css({
+                color: 'gray.600',
+                lineHeight: '1.5',
+                marginBottom: '1.5rem'
+              })}>
+                デザインシステムのドキュメント作成とコンポーネントの拡張を行っています。
+              </p>
+              <div class={css({
+                display: 'flex',
+                gap: '0.5rem',
+                marginBottom: '1.5rem',
+                flexWrap: 'wrap'
+              })}>
+                <span class={badge({ variant: 'primary', size: 'sm' })}>Astro</span>
+                <span class={badge({ variant: 'secondary', size: 'sm' })}>MDX</span>
+              </div>
+              <div class={css({
+                display: 'flex',
+                gap: '0.75rem'
+              })}>
+                <button class={button({ variant: 'secondary', size: 'sm' })}>
+                  作業を続ける
+                </button>
+                <button class={button({ variant: 'ghost', size: 'sm' })}>
+                  一時停止
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</Layout>

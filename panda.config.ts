@@ -1,5 +1,5 @@
 import { defineConfig } from "@pandacss/dev";
-import youkanPreset from "./lib/styles/index.ts";
+import ankoUIPreset from "./lib/styles/index.ts";
 
 export default defineConfig({
   // Whether to use css reset
@@ -12,7 +12,7 @@ export default defineConfig({
   exclude: [],
 
   // Use our custom preset (includes tokens, recipes, etc.)
-  presets: [youkanPreset],
+  presets: [ankoUIPreset],
 
   // The output directory for your css system (src内に配置)
   outdir: "src/styled-system",

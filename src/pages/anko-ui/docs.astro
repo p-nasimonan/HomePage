@@ -1,0 +1,458 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { css } from '../../styled-system/css';
+import { button } from '../../styled-system/recipes';
+import { token } from '../../styled-system/tokens';
+import '../../styled-system/styles.css';
+---
+
+<Layout title="Anko-UI Documentation">
+  <div class={css({
+    minHeight: '100vh',
+    display: 'flex'
+  })}>
+    <!-- サイドバー -->
+    <aside class={css({
+      width: '280px',
+      background: 'gray.50',
+      borderRight: '1px solid',
+      borderColor: 'gray.200',
+      padding: '2rem 0',
+      position: 'sticky',
+      top: '0',
+      height: '100vh',
+      overflowY: 'auto',
+      '@media (max-width: 768px)': {
+        display: 'none'
+      }
+    })}>
+      <div class={css({ padding: '0 1.5rem' })}>
+        <h2 class={css({
+          fontSize: '1.5rem',
+          fontWeight: 'bold',
+          marginBottom: '1.5rem',
+          color: 'gray.900'
+        })}>
+          ドキュメント
+        </h2>
+        <nav>
+          <ul class={css({ listStyle: 'none', margin: '0', padding: '0' })}>
+            <li class={css({ marginBottom: '0.5rem' })}>
+              <a href="#getting-started" class={css({
+                display: 'block',
+                padding: '0.5rem 1rem',
+                color: 'gray.700',
+                textDecoration: 'none',
+                borderRadius: '6px',
+                transition: 'all 0.2s',
+                _hover: {
+                  background: 'teal.50',
+                  color: 'teal.700'
+                }
+              })}>
+                はじめに
+              </a>
+            </li>
+            <li class={css({ marginBottom: '0.5rem' })}>
+              <a href="#installation" class={css({
+                display: 'block',
+                padding: '0.5rem 1rem',
+                color: 'gray.700',
+                textDecoration: 'none',
+                borderRadius: '6px',
+                transition: 'all 0.2s',
+                _hover: {
+                  background: 'teal.50',
+                  color: 'teal.700'
+                }
+              })}>
+                インストール
+              </a>
+            </li>
+            <li class={css({ marginBottom: '0.5rem' })}>
+              <a href="#colors" class={css({
+                display: 'block',
+                padding: '0.5rem 1rem',
+                color: 'gray.700',
+                textDecoration: 'none',
+                borderRadius: '6px',
+                transition: 'all 0.2s',
+                _hover: {
+                  background: 'teal.50',
+                  color: 'teal.700'
+                }
+              })}>
+                カラーシステム
+              </a>
+            </li>
+            <li class={css({ marginBottom: '0.5rem' })}>
+              <a href="#components" class={css({
+                display: 'block',
+                padding: '0.5rem 1rem',
+                color: 'gray.700',
+                textDecoration: 'none',
+                borderRadius: '6px',
+                transition: 'all 0.2s',
+                _hover: {
+                  background: 'teal.50',
+                  color: 'teal.700'
+                }
+              })}>
+                コンポーネント
+              </a>
+            </li>
+            <li class={css({ marginBottom: '0.5rem' })}>
+              <a href="#recipes" class={css({
+                display: 'block',
+                padding: '0.5rem 1rem',
+                color: 'gray.700',
+                textDecoration: 'none',
+                borderRadius: '6px',
+                transition: 'all 0.2s',
+                _hover: {
+                  background: 'teal.50',
+                  color: 'teal.700'
+                }
+              })}>
+                レシピ
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </aside>
+
+    <!-- メインコンテンツ -->
+    <main class={css({
+      flex: '1',
+      padding: '2rem',
+      maxWidth: 'calc(100% - 280px)',
+      '@media (max-width: 768px)': {
+        maxWidth: '100%'
+      }
+    })}>
+      <!-- Getting Started -->
+      <section id="getting-started" class={css({ marginBottom: '4rem' })}>
+        <h1 class={css({
+          fontSize: '3rem',
+          fontWeight: 'bold',
+          marginBottom: '1rem',
+          color: 'gray.900'
+        })}>
+          Anko-UI ドキュメント
+        </h1>
+        <p class={css({
+          fontSize: '1.2rem',
+          color: 'gray.600',
+          marginBottom: '2rem',
+          lineHeight: '1.6'
+        })}>
+          Anko-UIは、Panda CSSをベースとした現代的なデザインシステムです。
+          型安全性、パフォーマンス、開発体験を重視して設計されています。
+        </p>
+      </section>
+
+      <!-- Installation -->
+      <section id="installation" class={css({ marginBottom: '4rem' })}>
+        <h2 class={css({
+          fontSize: '2rem',
+          fontWeight: 'bold',
+          marginBottom: '1.5rem',
+          color: 'gray.900'
+        })}>
+          インストール
+        </h2>
+        <div class={css({
+          background: 'gray.900',
+          color: 'gray.100',
+          padding: '1.5rem',
+          borderRadius: '8px',
+          fontFamily: 'mono',
+          fontSize: '0.9rem',
+          marginBottom: '1rem',
+          overflow: 'auto'
+        })}>
+          <pre><code>npm install @pandacss/dev defu</code></pre>
+        </div>
+        <p class={css({
+          color: 'gray.600',
+          marginBottom: '1rem'
+        })}>
+          プロジェクトにAnko-UIプリセットを設定:
+        </p>
+        <div class={css({
+          background: 'gray.900',
+          color: 'gray.100',
+          padding: '1.5rem',
+          borderRadius: '8px',
+          fontFamily: 'mono',
+          fontSize: '0.9rem',
+          overflow: 'auto'
+        })}>
+          <pre><code>{`// panda.config.ts
+import { defineConfig } from "@pandacss/dev";
+import ankoUIPreset from "./lib/styles/index.ts";
+
+export default defineConfig({
+  presets: [ankoUIPreset],
+  include: ["./src/**/*.{js,jsx,ts,tsx,astro}"],
+  outdir: "src/styled-system",
+});`}</code></pre>
+        </div>
+      </section>
+
+      <!-- Colors -->
+      <section id="colors" class={css({ marginBottom: '4rem' })}>
+        <h2 class={css({
+          fontSize: '2rem',
+          fontWeight: 'bold',
+          marginBottom: '1.5rem',
+          color: 'gray.900'
+        })}>
+          カラーシステム
+        </h2>
+        <p class={css({
+          color: 'gray.600',
+          marginBottom: '2rem',
+          lineHeight: '1.6'
+        })}>
+          Anko-UIは構造化されたカラーシステムを提供します。各色には50から900までのシェードと、
+          セマンティックなバリアント（bg, lite, regular, deep）があります。
+        </p>
+
+        <!-- Primary Colors -->
+        <h3 class={css({
+          fontSize: '1.5rem',
+          fontWeight: 'bold',
+          marginBottom: '1rem',
+          color: 'gray.900'
+        })}>
+          プライマリカラー
+        </h3>
+        <div class={css({
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+          gap: '1rem',
+          marginBottom: '2rem'
+        })}>
+          <div class={css({
+            border: '1px solid',
+            borderColor: 'gray.200',
+            borderRadius: '8px',
+            overflow: 'hidden'
+          })}>
+            <div data-color-palette="teal" class={css({
+              background: 'colorPalette.500',
+              color: 'white',
+              padding: '1rem',
+              fontWeight: 'medium'
+            })}>
+              Teal
+            </div>
+            <div class={css({ padding: '1rem', fontSize: '0.9rem' })}>
+              <div class={css({ marginBottom: '0.5rem' })}>
+                <code class={css({ background: 'gray.100', padding: '0.2rem 0.4rem', borderRadius: '4px' })}>
+                  teal.500
+                </code>
+                <span class={css({ marginLeft: '0.5rem', color: 'gray.600' })}>
+                  {token('colors.teal.500')}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class={css({
+            border: '1px solid',
+            borderColor: 'gray.200',
+            borderRadius: '8px',
+            overflow: 'hidden'
+          })}>
+            <div data-color-palette="mint" class={css({
+              background: 'colorPalette.400',
+              color: 'white',
+              padding: '1rem',
+              fontWeight: 'medium'
+            })}>
+              Mint
+            </div>
+            <div class={css({ padding: '1rem', fontSize: '0.9rem' })}>
+              <div class={css({ marginBottom: '0.5rem' })}>
+                <code class={css({ background: 'gray.100', padding: '0.2rem 0.4rem', borderRadius: '4px' })}>
+                  mint.400
+                </code>
+                <span class={css({ marginLeft: '0.5rem', color: 'gray.600' })}>
+                  {token('colors.mint.400')}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Usage Example -->
+        <h3 class={css({
+          fontSize: '1.5rem',
+          fontWeight: 'bold',
+          marginBottom: '1rem',
+          color: 'gray.900'
+        })}>
+          使用例
+        </h3>
+        <div class={css({
+          background: 'gray.900',
+          color: 'gray.100',
+          padding: '1.5rem',
+          borderRadius: '8px',
+          fontFamily: 'mono',
+          fontSize: '0.9rem',
+          overflow: 'auto'
+        })}>
+          <pre><code>{`import { css } from './styled-system/css';
+
+// 基本的な使用
+const styles = css({
+  background: 'teal.500',
+  color: 'white'
+});
+
+// セマンティックカラー
+const cardStyles = css({
+  background: 'teal.bg',
+  border: '1px solid token(colors.teal.lite)'
+});
+
+// カラーパレット機能
+<div data-color-palette="teal" className={css({
+  background: 'colorPalette.500'
+})}>
+  Dynamic Color
+</div>`}</code></pre>
+        </div>
+      </section>
+
+      <!-- Components -->
+      <section id="components" class={css({ marginBottom: '4rem' })}>
+        <h2 class={css({
+          fontSize: '2rem',
+          fontWeight: 'bold',
+          marginBottom: '1.5rem',
+          color: 'gray.900'
+        })}>
+          コンポーネント
+        </h2>
+
+        <!-- Button Component -->
+        <h3 class={css({
+          fontSize: '1.5rem',
+          fontWeight: 'bold',
+          marginBottom: '1rem',
+          color: 'gray.900'
+        })}>
+          Button
+        </h3>
+        <p class={css({
+          color: 'gray.600',
+          marginBottom: '1rem',
+          lineHeight: '1.6'
+        })}>
+          様々なバリアントとサイズを持つボタンコンポーネント
+        </p>
+        
+        <!-- Button Examples -->
+        <div class={css({
+          padding: '2rem',
+          border: '1px solid',
+          borderColor: 'gray.200',
+          borderRadius: '8px',
+          marginBottom: '1rem'
+        })}>
+          <div class={css({
+            display: 'flex',
+            gap: '1rem',
+            flexWrap: 'wrap',
+            alignItems: 'center',
+            marginBottom: '1rem'
+          })}>
+            <button class={button({ variant: 'primary' })}>Primary</button>
+            <button class={button({ variant: 'secondary' })}>Secondary</button>
+            <button class={button({ variant: 'outline' })}>Outline</button>
+            <button class={button({ variant: 'ghost' })}>Ghost</button>
+          </div>
+          <div class={css({
+            display: 'flex',
+            gap: '1rem',
+            flexWrap: 'wrap',
+            alignItems: 'center'
+          })}>
+            <button class={button({ variant: 'primary', size: 'sm' })}>Small</button>
+            <button class={button({ variant: 'primary', size: 'md' })}>Medium</button>
+            <button class={button({ variant: 'primary', size: 'lg' })}>Large</button>
+          </div>
+        </div>
+
+        <div class={css({
+          background: 'gray.900',
+          color: 'gray.100',
+          padding: '1.5rem',
+          borderRadius: '8px',
+          fontFamily: 'mono',
+          fontSize: '0.9rem',
+          overflow: 'auto'
+        })}>
+          <pre><code>{`import { button } from './styled-system/recipes';
+
+// 基本的な使用
+<button className={button()}>
+  Default Button
+</button>
+
+// バリアント指定
+<button className={button({ variant: 'primary' })}>
+  Primary Button
+</button>
+
+// サイズ指定
+<button className={button({ variant: 'outline', size: 'lg' })}>
+  Large Outline Button
+</button>`}</code></pre>
+        </div>
+      </section>
+
+      <!-- Recipes -->
+      <section id="recipes" class={css({ marginBottom: '4rem' })}>
+        <h2 class={css({
+          fontSize: '2rem',
+          fontWeight: 'bold',
+          marginBottom: '1.5rem',
+          color: 'gray.900'
+        })}>
+          レシピ
+        </h2>
+        <p class={css({
+          color: 'gray.600',
+          marginBottom: '2rem',
+          lineHeight: '1.6'
+        })}>
+          Anko-UIには以下のレシピが含まれています：
+        </p>
+        <ul class={css({
+          listStyle: 'disc',
+          marginLeft: '2rem',
+          color: 'gray.700'
+        })}>
+          <li class={css({ marginBottom: '0.5rem' })}>
+            <strong>button</strong> - 様々なスタイルのボタン
+          </li>
+          <li class={css({ marginBottom: '0.5rem' })}>
+            <strong>badge</strong> - ステータス表示用バッジ
+          </li>
+          <li class={css({ marginBottom: '0.5rem' })}>
+            <strong>card</strong> - コンテンツカード
+          </li>
+          <li class={css({ marginBottom: '0.5rem' })}>
+            <strong>postCard</strong> - ブログ投稿カード
+          </li>
+        </ul>
+      </section>
+    </main>
+  </div>
+</Layout>
