@@ -1,0 +1,195 @@
+---
+import { css } from '../styled-system/css';
+import { badge, button } from '../styled-system/recipes';
+
+export interface Props {
+  title: string;
+  description: string;
+  pubDate: Date;
+  image?: string;
+  tags?: string[];
+}
+
+const { 
+  title, 
+  description, 
+  pubDate, 
+  image,
+  tags 
+} = Astro.props;
+---
+
+<article class={css({
+  background: 'semantic.background.primary',
+  borderRadius: '12px',
+  boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+  overflow: 'hidden',
+  marginBottom: '2rem'
+})}>
+  <!-- 記事ヘッダー -->
+  <header class={css({
+    padding: '2rem 2rem 1rem',
+    textAlign: 'center',
+    borderBottom: '1px solid',
+    borderColor: 'semantic.border.light'
+  })}>
+    {image && (
+      <div class={css({
+        width: '100%',
+        height: '300px',
+        overflow: 'hidden',
+        borderRadius: '8px',
+        marginBottom: '2rem'
+      })}>
+        <img 
+          src={image} 
+          alt={title} 
+          class={css({
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover'
+          })} 
+        />
+      </div>
+    )}
+    
+    <h1 class={css({
+      fontSize: '2.5rem',
+      marginBottom: '1rem',
+      color: 'semantic.text.primary',
+      lineHeight: '1.2',
+      '@media (max-width: 768px)': {
+        fontSize: '2rem'
+      }
+    })}>{title}</h1>
+    
+    <p class={css({
+      fontSize: '1.1rem',
+      color: 'semantic.text.secondary',
+      marginBottom: '1.5rem',
+      lineHeight: '1.6'
+    })}>{description}</p>
+    
+    <div class={css({
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      gap: '1rem',
+      flexWrap: 'wrap',
+      '@media (max-width: 768px)': {
+        flexDirection: 'column',
+        gap: '0.5rem'
+      }
+    })}>
+      <time 
+        datetime={pubDate.toISOString()}
+        class={css({
+          color: 'semantic.text.secondary',
+          fontSize: '0.9rem'
+        })}
+      >
+        {pubDate.toLocaleDateString('ja-JP', {
+          year: 'numeric',
+          month: 'long',  
+          day: 'numeric'
+        })}
+      </time>
+      
+      {tags && tags.length > 0 && (
+        <div class={css({
+          display: 'flex',
+          gap: '0.5rem',
+          flexWrap: 'wrap',
+          justifyContent: 'center'
+        })}>
+          {tags.map((tag) => (
+            <span class={badge({ variant: 'mint', size: 'sm' })}>{tag}</span>
+          ))}
+        </div>
+      )}
+    </div>
+  </header>
+
+  <!-- 記事コンテンツ -->
+  <div class={css({
+    padding: '2rem',
+    lineHeight: '1.8',
+    fontSize: '1.1rem',
+    color: 'semantic.text.primary',
+    '& h1': {
+      fontSize: '2rem',
+      marginTop: '2rem',
+      marginBottom: '1rem',
+      color: 'semantic.text.primary',
+      borderBottom: '2px solid',
+      borderColor: 'brand.teal',
+      paddingBottom: '0.5rem'
+    },
+    '& h2': {
+      fontSize: '1.6rem',
+      marginTop: '1.5rem',
+      marginBottom: '1rem',
+      color: 'semantic.text.primary'
+    },
+    '& h3': {
+      fontSize: '1.3rem',
+      marginTop: '1.5rem',
+      marginBottom: '1rem',
+      color: 'semantic.text.primary'
+    },
+    '& p': {
+      marginBottom: '1rem'
+    },
+    '& ul, & ol': {
+      marginBottom: '1rem',
+      paddingLeft: '2rem'
+    },
+    '& li': {
+      marginBottom: '0.5rem'
+    },
+    '& blockquote': {
+      borderLeft: '4px solid',
+      borderColor: 'brand.teal',
+      paddingLeft: '1rem',
+      marginLeft: '0',
+      marginRight: '0',
+      marginBottom: '1rem',
+      fontStyle: 'italic',
+      color: 'semantic.text.secondary'
+    },
+    '& code': {
+      backgroundColor: 'semantic.background.secondary',
+      padding: '0.2rem 0.4rem',
+      borderRadius: '4px',
+      fontSize: '0.9rem',
+      fontFamily: 'monospace'
+    },
+    '& pre': {
+      backgroundColor: 'semantic.text.primary',
+      color: 'white',
+      padding: '1rem',
+      borderRadius: '8px',
+      overflow: 'auto',
+      marginBottom: '1rem'
+    },
+    '& pre code': {
+      backgroundColor: 'transparent',
+      padding: '0'
+    },
+    '& a': {
+      color: 'brand.teal',
+      textDecoration: 'underline',
+      _hover: {
+        color: 'semantic.primary.dark'
+      }
+    },
+    '& img': {
+      maxWidth: '100%',
+      height: 'auto',
+      borderRadius: '8px',
+      marginBottom: '1rem'
+    }
+  })}>
+    <slot />
+  </div>
+</article>

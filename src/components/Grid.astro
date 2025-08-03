@@ -1,0 +1,41 @@
+---
+import { css } from '../styled-system/css';
+
+export interface Props {
+  columns?: number;
+  minWidth?: string;
+  gap?: string;
+  centerContent?: boolean;
+}
+
+const { 
+  columns,
+  minWidth = '350px',
+  gap = '2rem',
+  centerContent = false
+} = Astro.props;
+
+const gridTemplateColumns = columns 
+  ? `repeat(${columns}, 1fr)`
+  : `repeat(auto-fit, minmax(${minWidth}, 1fr))`;
+---
+
+<div class={css({
+  display: 'grid',
+  gridTemplateColumns,
+  gap,
+  marginBottom: centerContent ? '3rem' : '0',
+  '@media (max-width: 768px)': {
+    gridTemplateColumns: '1fr'
+  }
+})}>
+  <slot />
+</div>
+
+{centerContent && (
+  <div class={css({
+    textAlign: 'center'
+  })}>
+    <slot name="center-content" />
+  </div>
+)}

@@ -1,0 +1,52 @@
+---
+import { css } from '../styled-system/css';
+
+export interface Props {
+  title?: string;
+  background?: 'primary' | 'secondary' | 'tertiary' | 'transparent';
+  padding?: 'sm' | 'md' | 'lg' | 'xl';
+  maxWidth?: string;
+}
+
+const { 
+  title,
+  background = 'transparent',
+  padding = 'lg',
+  maxWidth = '1200px'
+} = Astro.props;
+
+const backgroundStyles = {
+  primary: 'semantic.background.primary',
+  secondary: 'semantic.background.secondary',
+  tertiary: 'semantic.background.tertiary',
+  transparent: 'transparent'
+};
+
+const paddingStyles = {
+  sm: '2rem 0',
+  md: '3rem 0',
+  lg: '4rem 0',
+  xl: '5rem 0'
+};
+---
+
+<section class={css({
+  padding: paddingStyles[padding],
+  background: backgroundStyles[background]
+})}>
+  <div class={css({
+    maxWidth,
+    margin: '0 auto',
+    padding: '0 20px'
+  })}>
+    {title && (
+      <h3 class={css({
+        textAlign: 'center',
+        fontSize: '2.5rem',
+        marginBottom: '3rem',
+        color: 'semantic.text.primary'
+      })}>{title}</h3>
+    )}
+    <slot />
+  </div>
+</section>
