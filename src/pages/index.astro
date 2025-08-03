@@ -1,77 +1,37 @@
 ---
-// ブログ記事を取得
+// 最新のブログ記事を取得
 import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
-import { button } from '../styled-system/recipes';
-import PostCard from '../components/PostCard.astro';
-import SkillCard from '../components/SkillCard.astro';
-import HeroSection from '../components/HeroSection.astro';
-import Section from '../components/Section.astro';
-import Grid from '../components/Grid.astro';
+import Section from '../components/ui/Section.astro';
+import Slideshow from '../components/ui/Slideshow.astro';
 
-// 最新のブログ記事を3件取得
-const posts = await getCollection('blog', ({ data }) => {
+// 最新のブログ記事を6件取得（スライドショー用）
+const recentPosts = await getCollection('blog', ({ data }) => {
   return import.meta.env.PROD ? data.draft !== true : true;
-}).then(posts => posts.sort((a, b) => new Date(b.data.pubDate).valueOf() - new Date(a.data.pubDate).valueOf()).slice(0, 3));
+}).then(posts => posts.sort((a, b) => new Date(b.data.pubDate).valueOf() - new Date(a.data.pubDate).valueOf()).slice(0, 6));
+
+// スライドショー用のデータに変換
+const slides = recentPosts.map((post) => ({
+  title: post.data.title,
+  description: post.data.description,
+  link: `/blog/${post.slug}`,
+  linkText: '記事を読む',
+  pubDate: new Date(post.data.pubDate),
+  tags: post.data.tags
+}));
 ---
 
-<Layout title="ようかん - 個人ブログ" description="ようかんの個人ブログです。技術的な知見や日常の気づきを共有しています。">
-  <!-- メインビジュアル -->
-  <HeroSection 
-    title="ようかんのブログへようこそ"
-    subtitle="フロントエンド開発者として活動しながら、技術的な知見や日常の気づきを共有しています。"
-    ctaText="自己紹介を見る"
-    ctaLink="/about"
-    variant="outline"
-    size="lg"
-  />
-
-  <!-- 最新ブログ記事 -->
-  <Section title="最新の記事" background="tertiary" padding="lg">
-    <Grid minWidth="350px" gap="2rem" centerContent={true}>
-      {posts.map((post, index) => (
-        <PostCard
-          title={post.data.title}
-          description={post.data.description}
-          pubDate={post.data.pubDate}
-          slug={post.slug}
-          image={post.data.image}
-          tags={post.data.tags}
-          variant={index === 0 ? 'featured' : 'default'}
-          size="md"
-        />
-      ))}
-      
-      <div slot="center-content">
-        <a href="/blog" class={button({ variant: 'secondary', size: 'md' })}>すべての記事を見る</a>
-      </div>
-    </Grid>
-  </Section>
-
-  <!-- スキル・興味 -->
-  <Section title="スキル・興味" background="primary" padding="lg">
-    <Grid minWidth="300px" gap="2rem">
-      <SkillCard
-        icon="💻"
-        title="フロントエンド開発"
-        description="React、Vue、Astroなどのモダンなフレームワークを使用したWebアプリケーション開発"
-        variant="cream"
-        size="lg"
-      />
-      <SkillCard
-        icon="🎨"
-        title="UI/UXデザイン"
-        description="ユーザビリティを重視したインターフェースデザインとユーザー体験の向上"
-        variant="mint"
-        size="lg"
-      />
-      <SkillCard
-        icon="📚"
-        title="技術ブログ"
-        description="学んだ技術や知見をブログで共有し、コミュニティに貢献"
-        variant="default"
-        size="lg"
-      />
-    </Grid>
+<Layout title="ようかん - ホーム" description="ようかんのサイトです。技術ブログや最新記事をチェックできます。">
+  <!-- 最新記事スライドショー -->
+  <Section background="white" padding="lg">
+    <Slideshow 
+      slides={slides}
+      size="lg"
+      rounded="lg"
+      autoPlay={true}
+      autoPlayInterval={6000}
+      showNavigation={true}
+      showIndicators={true}
+    />
   </Section>
 </Layout> 

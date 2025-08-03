@@ -1,11 +1,19 @@
 ---
-import { css } from '../../styled-system/css';
+import { css } from '../styled-system/css';
+import { dropdownSlot } from '../styled-system/recipes';
 
 export interface Props {
   currentPage?: 'home' | 'blog' | 'anko-ui';
 }
 
 const { currentPage = 'home' } = Astro.props;
+
+// Anko-UI ドロップダウンレシピを使用
+const dropdown = dropdownSlot({
+  size: 'md',
+  animation: 'slide',
+  position: 'left'
+});
 ---
 
 <header class={css({
@@ -13,20 +21,25 @@ const { currentPage = 'home' } = Astro.props;
   boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
   position: 'sticky',
   top: '0',
-  zIndex: '100'
+  zIndex: '100',
+  overflow: 'visible'
 })}>
   <div class={css({
     maxWidth: '1200px',
     margin: '0 auto',
-    padding: '0 20px'
+    padding: '0 20px',
+    overflow: 'visible',
+    position: 'relative'
   })}>
     <div class={css({
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',
       padding: '1rem 0',
+      height: '4rem',
       '@media (max-width: 768px)': {
-        padding: '0.75rem 0'
+        padding: '0.75rem 0',
+        height: '3.5rem'
       }
     })}>
       <h1 class={css({
@@ -40,12 +53,13 @@ const { currentPage = 'home' } = Astro.props;
         <a href="/" class={css({
           color: 'teal.500',
           textDecoration: 'none'
-        })}>ようかん</a>
+        })}>ようかん 技術ブログ</a>
       </h1>
 
       <!-- デスクトップナビゲーション -->
       <nav class={css({
         display: 'block',
+        overflow: 'visible',
         '@media (max-width: 768px)': {
           display: 'none'
         }
@@ -55,7 +69,8 @@ const { currentPage = 'home' } = Astro.props;
           listStyle: 'none',
           gap: '2rem',
           margin: '0',
-          padding: '0'
+          padding: '0',
+          overflow: 'visible'
         })}>
           <li>
             <a href="/" class={css({
@@ -79,9 +94,10 @@ const { currentPage = 'home' } = Astro.props;
               ブログ
             </a>
           </li>
-          <li class={css({ position: 'relative' })} 
-              onmouseover="this.querySelector('.anko-ui-dropdown').style.display='block'" 
-              onmouseout="this.querySelector('.anko-ui-dropdown').style.display='none'">
+          <li class={dropdown.trigger} 
+              id="anko-ui-menu-trigger"
+              onmouseover="showDropdown()" 
+              onmouseout="hideDropdown()">
             <a href="/anko-ui" class={css({
               textDecoration: 'none',
               color: currentPage === 'anko-ui' ? 'teal.500' : 'gray.900',
@@ -91,51 +107,18 @@ const { currentPage = 'home' } = Astro.props;
             })}>
               Anko-UI
             </a>
-            <div class="anko-ui-dropdown" style="display: none;" class={css({
-              position: 'absolute',
-              top: '100%',
-              left: '0',
-              minWidth: '150px',
-              background: 'white',
-              border: '1px solid',
-              borderColor: 'gray.200',
-              borderRadius: '8px',
-              boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-              zIndex: '10',
-              marginTop: '0.5rem'
-            })}>
-              <a href="/anko-ui" class={css({
-                display: 'block',
-                padding: '0.75rem 1rem',
-                color: 'gray.700',
-                textDecoration: 'none',
-                borderBottom: '1px solid',
-                borderColor: 'gray.100',
-                transition: 'background 0.2s',
-                _hover: { background: 'gray.50' }
-              })}>
+            <!-- ドロップダウンメニュー -->
+            <div 
+              id="anko-ui-dropdown" 
+              class={dropdown.content}
+            >
+              <a href="/anko-ui" class={dropdown.item}>
                 はじめに
               </a>
-              <a href="/anko-ui/docs" class={css({
-                display: 'block',
-                padding: '0.75rem 1rem',
-                color: 'gray.700',
-                textDecoration: 'none',
-                borderBottom: '1px solid',
-                borderColor: 'gray.100',
-                transition: 'background 0.2s',
-                _hover: { background: 'gray.50' }
-              })}>
+              <a href="/anko-ui/docs" class={dropdown.item}>
                 ドキュメント
               </a>
-              <a href="/anko-ui/playground" class={css({
-                display: 'block',
-                padding: '0.75rem 1rem',
-                color: 'gray.700',
-                textDecoration: 'none',
-                transition: 'background 0.2s',
-                _hover: { background: 'gray.50' }
-              })}>
+              <a href="/anko-ui/playground" class={dropdown.item}>
                 プレイグラウンド
               </a>
             </div>
@@ -250,6 +233,34 @@ const { currentPage = 'home' } = Astro.props;
 </header>
 
 <script>
+  // グローバルスコープで関数を定義
+  declare global {
+    interface Window {
+      showDropdown: () => void;
+      hideDropdown: () => void;
+      toggleMobileMenu: () => void;
+    }
+  }
+
+  let dropdownTimeout: ReturnType<typeof setTimeout>;
+
+  function showDropdown() {
+    clearTimeout(dropdownTimeout);
+    const dropdown = document.getElementById('anko-ui-dropdown');
+    if (dropdown) {
+      dropdown.setAttribute('data-state', 'open');
+    }
+  }
+
+  function hideDropdown() {
+    dropdownTimeout = setTimeout(() => {
+      const dropdown = document.getElementById('anko-ui-dropdown');
+      if (dropdown) {
+        dropdown.setAttribute('data-state', 'closed');
+      }
+    }, 200);
+  }
+
   function toggleMobileMenu() {
     const menu = document.getElementById('mobile-menu');
     if (menu) {
@@ -260,4 +271,9 @@ const { currentPage = 'home' } = Astro.props;
       }
     }
   }
+
+  // グローバルスコープに関数を追加
+  window.showDropdown = showDropdown;
+  window.hideDropdown = hideDropdown;
+  window.toggleMobileMenu = toggleMobileMenu;
 </script>

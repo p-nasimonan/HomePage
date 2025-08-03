@@ -1,10 +1,10 @@
 ---
 import { getCollection } from 'astro:content';
 import { css } from '../../styled-system/css';
-import { button } from '../../styled-system/recipes';
-import BaseLayout from '../../components/layouts/BaseLayout.astro';
-import Section from '../../components/layouts/Section.astro';
-import Grid from '../../components/layouts/Grid.astro';
+import { badge, button } from '../../styled-system/recipes';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Section from '../../components/ui/Section.astro';
+import Grid from '../../components/ui/Grid.astro';
 
 // すべてのブログ記事を取得（下書き以外）
 const posts = await getCollection('blog', ({ data }) => {

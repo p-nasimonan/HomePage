@@ -10,7 +10,7 @@ import * as dimensions from "./tokens/dimensions.ts";
 import * as animations from "./tokens/animations.ts";
 import * as transforms from "./tokens/transforms.ts";
 import * as typographies from "./tokens/typography.ts";
-import { buttonRecipe, badgeRecipe, cardRecipe, postCardRecipe, postCardSlotRecipe } from "./recipes";
+import { buttonRecipe, badgeRecipe, cardRecipe, postCardRecipe, postCardSlotRecipe, slideshowRecipe, slideshowSlotRecipe, dropdownSlotRecipe } from "./recipes";
 
 export default definePreset({
   name: "anko-ui",
@@ -34,9 +34,12 @@ export default definePreset({
       badge: badgeRecipe,
       card: cardRecipe,
       postCard: postCardRecipe,
+      slideshow: slideshowRecipe,
     },
     slotRecipes: {
       postCardSlot: postCardSlotRecipe,
+      slideshowSlot: slideshowSlotRecipe,
+      dropdownSlot: dropdownSlotRecipe,
     },
     breakpoints: dimensions.breakpoints,
     textStyles: typographies.textStyle,
@@ -93,3 +96,4 @@ export const ANKO_UI_VERSION = '1.0.0' as const;
 // 従来のエクスポート（後方互換性）
 export * from './tokens';
 export * from './utils';
+export * from './components';
