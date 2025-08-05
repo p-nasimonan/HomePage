@@ -4,6 +4,8 @@
  * カードスタック式スライドショーコンポーネント - マウススクロールで奥行きアニメーション
  */
 
+import { cardStackSlot } from '../../styled-system/recipes';
+
 export interface Slide {
   title: string;
   description: string;
@@ -34,40 +36,47 @@ const {
 } = Astro.props;
 
 const themes = ['gradient1', 'gradient2', 'gradient3', 'gradient4', 'teal', 'gray'];
+const cardStackClasses = cardStackSlot({ size, rounded });
+---
 ---
 
-<div class={`anko-card-stack anko-card-stack--${size} ${className}`} id="anko-card-stack">
-  <div class="anko-card-stack__container" id="anko-stack-container">
+<div class={`${cardStackClasses.container} ${className}`} id="anko-card-stack">
+  <div class={cardStackClasses.stackContainer} id="anko-stack-container">
     {slides.map((slide, index) => {
       const theme = slide.theme || themes[index % themes.length];
+      const backgroundImage = slide.image ? `url(${slide.image})` : '';
+      const cardStyle = backgroundImage 
+        ? `--stack-index: ${index}; z-index: ${slides.length - index}; background-image: ${backgroundImage};`
+        : `--stack-index: ${index}; z-index: ${slides.length - index};`;
+      
       return (
         <div 
-          class="anko-card-stack__card" 
+          class={cardStackClasses.card} 
           data-theme={theme}
           data-index={index}
-          style={`--stack-index: ${index}; z-index: ${slides.length - index};`}
+          style={cardStyle}
         >
-          <div class="anko-card-stack__content">
-            <h2 class="anko-card-stack__title">
+          <div class={cardStackClasses.content}>
+            <h2 class={cardStackClasses.title}>
               {slide.title}
             </h2>
-            <p class="anko-card-stack__description">
+            <p class={cardStackClasses.description}>
               {slide.description}
             </p>
             {slide.pubDate && (
-              <time class="anko-card-stack__date">
+              <time class={cardStackClasses.date}>
                 {slide.pubDate.toLocaleDateString('ja-JP')}
               </time>
             )}
             {slide.tags && slide.tags.length > 0 && (
-              <div class="anko-card-stack__tags">
+              <div class={cardStackClasses.tags}>
                 {slide.tags.slice(0, 3).map(tag => (
-                  <span class="anko-card-stack__tag">#{tag}</span>
+                  <span class={cardStackClasses.tag}>#{tag}</span>
                 ))}
               </div>
             )}
             {slide.link && (
-              <a href={slide.link} class="anko-card-stack__link">
+              <a href={slide.link} class={cardStackClasses.link}>
                 {slide.linkText || '詳細を見る'}
               </a>
             )}
@@ -77,11 +86,11 @@ const themes = ['gradient1', 'gradient2', 'gradient3', 'gradient4', 'teal', 'gra
     })}
   </div>
   
-  <div class="anko-card-stack__info">
-    <span class="anko-card-stack__counter">
+  <div class={cardStackClasses.info}>
+    <span class={cardStackClasses.counter}>
       <span id="current-slide">1</span> / {slides.length}
     </span>
-    <p class="anko-card-stack__hint">
+    <p class={cardStackClasses.hint}>
       マウスホイールでスクロール
     </p>
   </div>
@@ -91,9 +100,9 @@ const themes = ['gradient1', 'gradient2', 'gradient3', 'gradient4', 'teal', 'gra
   class AnkoCardStack {
     constructor() {
       this.currentIndex = 0;
-      this.totalCards = document.querySelectorAll('.anko-card-stack__card').length;
+      this.totalCards = document.querySelectorAll('[data-index]').length;
       this.container = document.getElementById('anko-stack-container');
-      this.cards = document.querySelectorAll('.anko-card-stack__card');
+      this.cards = document.querySelectorAll('[data-index]');
       this.counter = document.getElementById('current-slide');
       this.isAnimating = false;
       this.autoPlayTimer = null;
@@ -241,177 +250,3 @@ const themes = ['gradient1', 'gradient2', 'gradient3', 'gradient4', 'teal', 'gra
     new AnkoCardStack();
   }
 </script>
-
-<style>
-  /* Anko-UI Card Stack Base Styles */
-  .anko-card-stack {
-    position: relative;
-    width: 100%;
-    max-width: 800px;
-    margin: 0 auto;
-    perspective: 1000px;
-    overflow: visible;
-  }
-  
-  .anko-card-stack--sm { height: 300px; }
-  .anko-card-stack--md { height: 400px; }
-  .anko-card-stack--lg { height: 500px; }
-  .anko-card-stack--xl { height: 600px; }
-  
-  .anko-card-stack__container {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    cursor: grab;
-    transform-style: preserve-3d;
-  }
-  
-  .anko-card-stack__container:active {
-    cursor: grabbing;
-  }
-  
-  .anko-card-stack__card {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-    transform-style: preserve-3d;
-  }
-  
-  .anko-card-stack__card[data-theme="gradient1"] {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  }
-  
-  .anko-card-stack__card[data-theme="gradient2"] {
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-  }
-  
-  .anko-card-stack__card[data-theme="gradient3"] {
-    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-  }
-  
-  .anko-card-stack__card[data-theme="gradient4"] {
-    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-  }
-  
-  .anko-card-stack__card[data-theme="teal"] {
-    background: linear-gradient(135deg, #14b8a6 0%, #0f766e 100%);
-  }
-  
-  .anko-card-stack__card[data-theme="gray"] {
-    background: linear-gradient(135deg, #6b7280 0%, #374151 100%);
-  }
-  
-  .anko-card-stack__content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    padding: 2rem;
-    text-align: center;
-    color: white;
-  }
-  
-  .anko-card-stack__title {
-    font-size: 2rem;
-    font-weight: bold;
-    margin-bottom: 1rem;
-    line-height: 1.2;
-  }
-  
-  .anko-card-stack__description {
-    font-size: 1.125rem;
-    margin-bottom: 1.5rem;
-    max-width: 600px;
-    line-height: 1.6;
-    opacity: 0.9;
-  }
-  
-  .anko-card-stack__date {
-    background: rgba(255, 255, 255, 0.2);
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
-    font-size: 0.875rem;
-    margin-bottom: 1rem;
-  }
-  
-  .anko-card-stack__tags {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-bottom: 1.5rem;
-  }
-  
-  .anko-card-stack__tag {
-    background: rgba(255, 255, 255, 0.2);
-    padding: 0.25rem 0.75rem;
-    border-radius: 15px;
-    font-size: 0.75rem;
-  }
-  
-  .anko-card-stack__link {
-    display: inline-block;
-    background: white;
-    color: #667eea;
-    padding: 0.75rem 2rem;
-    border-radius: 25px;
-    text-decoration: none;
-    font-weight: bold;
-    transition: all 0.2s;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  }
-  
-  .anko-card-stack__link:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-  }
-  
-  .anko-card-stack__info {
-    position: absolute;
-    bottom: -60px;
-    left: 50%;
-    transform: translateX(-50%);
-    text-align: center;
-    color: #6b7280;
-  }
-  
-  .anko-card-stack__counter {
-    font-size: 1.125rem;
-    font-weight: 600;
-    color: #374151;
-    margin-bottom: 0.5rem;
-    display: block;
-  }
-  
-  .anko-card-stack__hint {
-    font-size: 0.875rem;
-    margin: 0;
-    opacity: 0.7;
-  }
-  
-  /* レスポンシブ対応 */
-  @media (max-width: 768px) {
-    .anko-card-stack__title {
-      font-size: 1.5rem;
-    }
-    
-    .anko-card-stack__description {
-      font-size: 1rem;
-    }
-    
-    .anko-card-stack__content {
-      padding: 1.5rem;
-    }
-    
-    .anko-card-stack__hint {
-      display: none;
-    }
-  }
-</style>

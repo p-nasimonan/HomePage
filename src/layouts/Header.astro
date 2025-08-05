@@ -94,35 +94,6 @@ const dropdown = dropdownSlot({
               ブログ
             </a>
           </li>
-          <li class={dropdown.trigger} 
-              id="anko-ui-menu-trigger"
-              onmouseover="showDropdown()" 
-              onmouseout="hideDropdown()">
-            <a href="/anko-ui" class={css({
-              textDecoration: 'none',
-              color: currentPage === 'anko-ui' ? 'teal.500' : 'gray.900',
-              fontWeight: '500',
-              transition: 'color 0.3s',
-              _hover: { color: 'teal.500' }
-            })}>
-              Anko-UI
-            </a>
-            <!-- ドロップダウンメニュー -->
-            <div 
-              id="anko-ui-dropdown" 
-              class={dropdown.content}
-            >
-              <a href="/anko-ui" class={dropdown.item}>
-                はじめに
-              </a>
-              <a href="/anko-ui/docs" class={dropdown.item}>
-                ドキュメント
-              </a>
-              <a href="/anko-ui/playground" class={dropdown.item}>
-                プレイグラウンド
-              </a>
-            </div>
-          </li>
         </ul>
       </nav>
 

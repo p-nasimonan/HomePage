@@ -14,6 +14,7 @@ const recentPosts = await getCollection('blog', ({ data }) => {
 const slides = recentPosts.map((post) => ({
   title: post.data.title,
   description: post.data.description,
+  image: post.data.heroImage || post.data.image || '/images/default-blog-hero.jpg', // サムネイル画像
   link: `/blog/${post.slug}`,
   linkText: '記事を読む',
   pubDate: new Date(post.data.pubDate),
@@ -22,16 +23,16 @@ const slides = recentPosts.map((post) => ({
 ---
 
 <Layout title="ようかん - ホーム" description="ようかんのサイトです。技術ブログや最新記事をチェックできます。">
-  <!-- 最新記事スライドショー -->
+  
+  
+  <!-- 最新記事カードスタック -->
   <Section background="white" padding="lg">
     <Slideshow 
       slides={slides}
-      size="lg"
-      rounded="lg"
+      size="md"
+      rounded="md"
       autoPlay={true}
       autoPlayInterval={6000}
-      showNavigation={true}
-      showIndicators={true}
     />
   </Section>
 </Layout> 

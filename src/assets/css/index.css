@@ -1,5 +1,5 @@
 @layer reset;
-
+@import '../../styled-system/styles.css';
 @layer base {
   html {
     overflow: hidden;
@@ -28,4 +28,5 @@
     }
   }
 }
+
 @layer reset, base, tokens, recipes, utilities; 
