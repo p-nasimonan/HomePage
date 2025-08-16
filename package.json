@@ -3,12 +3,20 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "dev": "astro dev",
+    "prepare": "panda codegen && panda",
+    "dev": "astro dev && panda -w",
+    "dev:panda": "panda -w",
+    "dev:astro": "astro dev",
+    "dev:test": "vitest --ui",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^5.8.1"
+    "astro": "^5.12.8",
+    "defu": "^6.1.4"
+  },
+  "devDependencies": {
+    "@pandacss/dev": "^0.54.0"
   }
 }

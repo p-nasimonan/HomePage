@@ -1,0 +1,87 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../../layouts/Layout.astro';
+import { css } from '../../../styled-system/css';
+import { button } from '../../../styled-system/recipes';
+import BlogPost from '../../../components/ui/BlogPost.astro';
+import Section from '../../../components/ui/Section.astro';
+
+// 型定義をインポート
+import type { CollectionEntry } from 'astro:content';
+
+
+// 動的ルーティングの設定
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+
+const { post } = Astro.props as { post: CollectionEntry<'blog'> };
+const Content = post.body;
+---
+
+<Layout title={`${post.data.title} - ようかん`} description={post.data.description}>
+  <main class={css({
+    padding: '2rem 0',
+    background: 'semantic.background.tertiary',
+    minHeight: '100vh'
+  })}>
+    <Section background="transparent" padding="md">
+      <!-- 戻るボタン -->
+      <div class={css({
+        marginBottom: '2rem'
+      })}>
+        <a 
+          href="/blog" 
+          class={button({ variant: 'outline', size: 'sm' })}
+        >
+          ← ブログ一覧に戻る
+        </a>
+      </div>
+
+      <!-- ブログ記事 -->
+      <BlogPost
+        title={post.data.title}
+        description={post.data.description}
+        pubDate={post.data.pubDate}
+        image={post.data.image}
+        tags={post.data.tags}
+      >
+        <Content />
+      </BlogPost>
+
+      <!-- 関連リンク -->
+      <div class={css({
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginTop: '3rem',
+        paddingTop: '2rem',
+        borderTop: '1px solid',
+        borderColor: 'semantic.border.light',
+        '@media (max-width: 768px)': {
+          flexDirection: 'column',
+          gap: '1rem',
+          textAlign: 'center'
+        }
+      })}>
+        <a 
+          href="/blog" 
+          class={button({ variant: 'secondary', size: 'md' })}
+        >
+          他の記事を読む
+        </a>
+        <a 
+          href="/" 
+          class={button({ variant: 'outline', size: 'md' })}
+        >
+          ホームに戻る
+        </a>
+      </div>
+    </Section>
+  </main>
+</Layout>

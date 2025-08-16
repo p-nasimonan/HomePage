@@ -1,0 +1,43 @@
+---
+import { css } from '../../styled-system/css';
+
+export interface Props {
+  columns?: number;
+  minWidth?: string;
+  gap?: string;
+  centerContent?: boolean;
+  className?: string;
+  responsive?: boolean;
+}
+
+const { 
+  columns,
+  minWidth = '350px',
+  gap = '2rem',
+  centerContent = false,
+  className = '',
+  responsive = true
+} = Astro.props;
+
+const gridTemplateColumns = columns 
+  ? `repeat(${columns}, 1fr)`
+  : `repeat(auto-fit, minmax(${minWidth}, 1fr))`;
+---
+
+<div class={`${css({
+  display: 'grid',
+  gridTemplateColumns,
+  gap,
+  marginBottom: centerContent ? '3rem' : '0',
+  '@media (max-width: 768px)': responsive ? {
+    gridTemplateColumns: minWidth === '350px' ? '1fr' : 
+                        parseInt(minWidth) > 300 ? '1fr' : gridTemplateColumns,
+    gap: '1.5rem'
+  } : {},
+  '@media (max-width: 480px)': responsive ? {
+    gridTemplateColumns: '1fr',
+    gap: '1rem'
+  } : {}
+})} ${className}`}>
+  <slot />
+</div>

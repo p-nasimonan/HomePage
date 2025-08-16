@@ -1,0 +1,163 @@
+---
+import { getCollection } from 'astro:content';
+import { css } from '../../styled-system/css';
+import { badge, button } from '../../styled-system/recipes';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Section from '../../components/ui/Section.astro';
+import Grid from '../../components/ui/Grid.astro';
+
+// すべてのブログ記事を取得（下書き以外）
+const posts = await getCollection('blog', ({ data }) => {
+  return import.meta.env.PROD ? data.draft !== true : true;
+}).then(posts => posts.sort((a, b) => new Date(b.data.pubDate).valueOf() - new Date(a.data.pubDate).valueOf()));
+
+// ページネーション設定
+const postsPerPage = 6;
+const currentPage = Number(Astro.url.searchParams.get('page')) || 1;
+const totalPages = Math.ceil(posts.length / postsPerPage);
+const startIndex = (currentPage - 1) * postsPerPage;
+const endIndex = startIndex + postsPerPage;
+const currentPosts = posts.slice(startIndex, endIndex);
+---
+
+<BaseLayout 
+  title="ブログ - ようかん" 
+  description="技術的な知見や日常の気づきを共有するブログです。"
+  currentPage="blog"
+>
+  <Section 
+    title="ブログ記事一覧" 
+    subtitle="技術的な知見や日常の気づきを共有しています"
+    background="gray"
+    padding="lg"
+  >
+    <Grid minWidth="350px" gap="2rem">
+      {currentPosts.map((post) => (
+        <div class={css({
+          background: 'white',
+          border: '1px solid',
+          borderColor: 'gray.200',
+          borderRadius: '12px',
+          padding: '1.5rem',
+          boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+          transition: 'all 0.2s',
+          _hover: {
+            transform: 'translateY(-2px)',
+            boxShadow: '0 4px 8px rgba(0,0,0,0.15)'
+          }
+        })}>
+          <h3 class={css({
+            fontSize: '1.25rem',
+            fontWeight: 'bold',
+            marginBottom: '0.5rem',
+            color: 'gray.900'
+          })}>
+            <a href={`/blog/${post.slug}`} class={css({
+              textDecoration: 'none',
+              color: 'inherit',
+              _hover: { color: 'teal.600' }
+            })}>
+              {post.data.title}
+            </a>
+          </h3>
+          <p class={css({
+            color: 'gray.600',
+            marginBottom: '1rem',
+            lineHeight: '1.5'
+          })}>
+            {post.data.description}
+          </p>
+          <div class={css({
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            fontSize: '0.875rem',
+            color: 'gray.500'
+          })}>
+            <time datetime={post.data.pubDate.toISOString()}>
+              {post.data.pubDate.toLocaleDateString('ja-JP')}
+            </time>
+            {post.data.tags && post.data.tags.length > 0 && (
+              <span class={css({
+                background: 'teal.100',
+                color: 'teal.700',
+                padding: '0.25rem 0.5rem',
+                borderRadius: '4px',
+                fontSize: '0.75rem'
+              })}>
+                {post.data.tags[0]}
+              </span>
+            )}
+          </div>
+        </div>
+      ))}
+    </Grid>
+
+    <!-- ページネーション -->
+    {totalPages > 1 && (
+      <nav class={css({
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: '1rem',
+        marginTop: '3rem',
+        '@media (max-width: 768px)': {
+          flexDirection: 'column',
+          gap: '1rem'
+        }
+      })}>
+        {currentPage > 1 && (
+          <a 
+            href={`/blog?page=${currentPage - 1}`}
+            class={button({ variant: 'outline', size: 'sm' })}
+          >
+            前のページ
+          </a>
+        )}
+
+        <div class={css({
+          display: 'flex',
+          gap: '0.5rem',
+          '@media (max-width: 768px)': {
+            flexWrap: 'wrap',
+            justifyContent: 'center'
+          }
+        })}>
+          {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
+            const pageNum = Math.max(1, Math.min(totalPages - 4, currentPage - 2)) + i;
+            return (
+              <a 
+                href={`/blog?page=${pageNum}`} 
+                class={pageNum === currentPage 
+                  ? button({ variant: 'primary', size: 'sm' })
+                  : button({ variant: 'outline', size: 'sm' })
+                }
+              >
+                {pageNum}
+              </a>
+            );
+          })}
+        </div>
+
+        {currentPage < totalPages && (
+          <a 
+            href={`/blog?page=${currentPage + 1}`}
+            class={button({ variant: 'outline', size: 'sm' })}
+          >
+            次のページ
+          </a>
+        )}
+      </nav>
+    )}
+    
+    {posts.length === 0 && (
+      <div class={css({
+        textAlign: 'center',
+        padding: '3rem',
+        color: 'gray.500'
+      })}>
+        ブログ記事が見つかりませんでした。
+      </div>
+    )}
+  </Section>
+</BaseLayout>

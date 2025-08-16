@@ -1,0 +1,252 @@
+---
+/**
+ * Anko-UI Card Stack Slideshow Component
+ * カードスタック式スライドショーコンポーネント - マウススクロールで奥行きアニメーション
+ */
+
+import { cardStackSlot } from '../../styled-system/recipes';
+
+export interface Slide {
+  title: string;
+  description: string;
+  image?: string;
+  link?: string;
+  linkText?: string;
+  pubDate?: Date;
+  tags?: string[];
+  theme?: 'gradient1' | 'gradient2' | 'gradient3' | 'gradient4' | 'teal' | 'gray';
+}
+
+export interface Props {
+  slides: Slide[];
+  size?: 'sm' | 'md' | 'lg' | 'xl';
+  rounded?: 'none' | 'sm' | 'md' | 'lg' | 'xl';
+  autoPlay?: boolean;
+  autoPlayInterval?: number;
+  className?: string;
+}
+
+const { 
+  slides = [],
+  size = 'md',
+  rounded = 'md',
+  autoPlay = false,
+  autoPlayInterval = 4000,
+  className = ''
+} = Astro.props;
+
+const themes = ['gradient1', 'gradient2', 'gradient3', 'gradient4', 'teal', 'gray'];
+const cardStackClasses = cardStackSlot({ size, rounded });
+---
+---
+
+<div class={`${cardStackClasses.container} ${className}`} id="anko-card-stack">
+  <div class={cardStackClasses.stackContainer} id="anko-stack-container">
+    {slides.map((slide, index) => {
+      const theme = slide.theme || themes[index % themes.length];
+      const backgroundImage = slide.image ? `url(${slide.image})` : '';
+      const cardStyle = backgroundImage 
+        ? `--stack-index: ${index}; z-index: ${slides.length - index}; background-image: ${backgroundImage};`
+        : `--stack-index: ${index}; z-index: ${slides.length - index};`;
+      
+      return (
+        <div 
+          class={cardStackClasses.card} 
+          data-theme={theme}
+          data-index={index}
+          style={cardStyle}
+        >
+          <div class={cardStackClasses.content}>
+            <h2 class={cardStackClasses.title}>
+              {slide.title}
+            </h2>
+            <p class={cardStackClasses.description}>
+              {slide.description}
+            </p>
+            {slide.pubDate && (
+              <time class={cardStackClasses.date}>
+                {slide.pubDate.toLocaleDateString('ja-JP')}
+              </time>
+            )}
+            {slide.tags && slide.tags.length > 0 && (
+              <div class={cardStackClasses.tags}>
+                {slide.tags.slice(0, 3).map(tag => (
+                  <span class={cardStackClasses.tag}>#{tag}</span>
+                ))}
+              </div>
+            )}
+            {slide.link && (
+              <a href={slide.link} class={cardStackClasses.link}>
+                {slide.linkText || '詳細を見る'}
+              </a>
+            )}
+          </div>
+        </div>
+      );
+    })}
+  </div>
+  
+  <div class={cardStackClasses.info}>
+    <span class={cardStackClasses.counter}>
+      <span id="current-slide">1</span> / {slides.length}
+    </span>
+    <p class={cardStackClasses.hint}>
+      マウスホイールでスクロール
+    </p>
+  </div>
+</div>
+
+<script define:vars={{ autoPlay, autoPlayInterval }}>
+  class AnkoCardStack {
+    constructor() {
+      this.currentIndex = 0;
+      this.totalCards = document.querySelectorAll('[data-index]').length;
+      this.container = document.getElementById('anko-stack-container');
+      this.cards = document.querySelectorAll('[data-index]');
+      this.counter = document.getElementById('current-slide');
+      this.isAnimating = false;
+      this.autoPlayTimer = null;
+      
+      this.init();
+    }
+    
+    init() {
+      this.setupCards();
+      this.setupEventListeners();
+      this.updateCounter();
+      
+      if (autoPlay && this.totalCards > 1) {
+        this.startAutoPlay();
+      }
+    }
+    
+    setupCards() {
+      this.cards.forEach((card, index) => {
+        const stackIndex = index - this.currentIndex;
+        this.updateCardPosition(card, stackIndex);
+      });
+    }
+    
+    updateCardPosition(card, stackIndex) {
+      const absIndex = Math.abs(stackIndex);
+      
+      if (stackIndex < 0) {
+        // 前のカード（奥側）
+        card.style.transform = `
+          translateZ(-${absIndex * 100}px) 
+          translateY(${absIndex * 20}px) 
+          scale(${1 - absIndex * 0.1})
+        `;
+        card.style.opacity = Math.max(0.3, 1 - absIndex * 0.3);
+      } else if (stackIndex === 0) {
+        // 現在のカード（手前）
+        card.style.transform = 'translateZ(0px) translateY(0px) scale(1)';
+        card.style.opacity = '1';
+      } else {
+        // 次のカード（さらに奥側）
+        card.style.transform = `
+          translateZ(-${stackIndex * 100}px) 
+          translateY(${stackIndex * 20}px) 
+          scale(${1 - stackIndex * 0.1})
+        `;
+        card.style.opacity = Math.max(0.1, 1 - stackIndex * 0.3);
+      }
+      
+      card.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+    }
+    
+    setupEventListeners() {
+      if (this.container) {
+        this.container.addEventListener('wheel', (e) => {
+          e.preventDefault();
+          
+          if (this.isAnimating) return;
+          
+          if (e.deltaY > 0) {
+            this.nextCard();
+          } else {
+            this.prevCard();
+          }
+        });
+        
+        // タッチイベント
+        let startY = 0;
+        this.container.addEventListener('touchstart', (e) => {
+          startY = e.touches[0].clientY;
+        });
+        
+        this.container.addEventListener('touchend', (e) => {
+          const endY = e.changedTouches[0].clientY;
+          const diff = startY - endY;
+          
+          if (Math.abs(diff) > 50) {
+            if (diff > 0) {
+              this.nextCard();
+            } else {
+              this.prevCard();
+            }
+          }
+        });
+      }
+    }
+    
+    nextCard() {
+      if (this.isAnimating) return;
+      
+      this.isAnimating = true;
+      this.currentIndex = (this.currentIndex + 1) % this.totalCards;
+      this.updateCards();
+      this.updateCounter();
+      
+      setTimeout(() => {
+        this.isAnimating = false;
+      }, 600);
+    }
+    
+    prevCard() {
+      if (this.isAnimating) return;
+      
+      this.isAnimating = true;
+      this.currentIndex = (this.currentIndex - 1 + this.totalCards) % this.totalCards;
+      this.updateCards();
+      this.updateCounter();
+      
+      setTimeout(() => {
+        this.isAnimating = false;
+      }, 600);
+    }
+    
+    updateCards() {
+      this.cards.forEach((card, index) => {
+        const stackIndex = index - this.currentIndex;
+        this.updateCardPosition(card, stackIndex);
+      });
+    }
+    
+    updateCounter() {
+      if (this.counter) {
+        this.counter.textContent = this.currentIndex + 1;
+      }
+    }
+    
+    startAutoPlay() {
+      this.autoPlayTimer = setInterval(() => {
+        this.nextCard();
+      }, autoPlayInterval);
+    }
+    
+    stopAutoPlay() {
+      if (this.autoPlayTimer) {
+        clearInterval(this.autoPlayTimer);
+        this.autoPlayTimer = null;
+      }
+    }
+  }
+  
+  // DOMが読み込まれた後に初期化
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => new AnkoCardStack());
+  } else {
+    new AnkoCardStack();
+  }
+</script>

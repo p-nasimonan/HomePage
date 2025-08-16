@@ -1,0 +1,52 @@
+---
+import { css } from '../../styled-system/css';
+import { button } from '../../styled-system/recipes';
+
+export interface Props {
+  title: string;
+  subtitle: string;
+  ctaText?: string;
+  ctaLink?: string;
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'teal' | 'mint';
+  size?: 'sm' | 'md' | 'lg';
+}
+
+const { 
+  title, 
+  subtitle, 
+  ctaText = '詳しく見る',
+  ctaLink = '#',
+  variant = 'outline',
+  size = 'lg'
+} = Astro.props;
+---
+
+<section class={css({
+  background: 'linear-gradient(135deg, teal.500 0%, mint.300 100%)',
+  color: 'white',
+  padding: '4rem 0',
+  textAlign: 'center'
+})}>
+  <div class={css({
+    maxWidth: '1200px',
+    margin: '0 auto',
+    padding: '0 20px'
+  })}>
+    <div class="hero-content">
+      <h2 class={css({
+        fontSize: '3rem',
+        marginBottom: '1rem',
+        fontWeight: 'bold',
+        '@media (max-width: 768px)': {
+          fontSize: '2rem'
+        }
+      })}>{title}</h2>
+      <p class={css({
+        fontSize: '1.2rem',
+        marginBottom: '2rem',
+        opacity: '0.9'
+      })}>{subtitle}</p>
+      <a href={ctaLink} class={button({ variant, size })}>{ctaText}</a>
+    </div>
+  </div>
+</section>
