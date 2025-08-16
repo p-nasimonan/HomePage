@@ -2,7 +2,7 @@
 import { getCollection } from 'astro:content';
 import Layout from '../../../layouts/Layout.astro';
 import { css } from '../../../styled-system/css';
-import { button } from '../../../styled-system/recipes';
+import { btn } from '../../../styled-system/recipes';
 import BlogPost from '../../../components/ui/BlogPost.astro';
 import Section from '../../../components/ui/Section.astro';
 
@@ -21,7 +21,7 @@ export async function getStaticPaths() {
 
 
 const { post } = Astro.props as { post: CollectionEntry<'blog'> };
-const Content = post.body;
+const { Content } = await post.render();
 ---
 
 <Layout title={`${post.data.title} - ようかん`} description={post.data.description}>
@@ -37,7 +37,7 @@ const Content = post.body;
       })}>
         <a 
           href="/blog" 
-          class={button({ variant: 'outline', size: 'sm' })}
+          class={btn({ variant: 'outline', size: 'sm' })}
         >
           ← ブログ一覧に戻る
         </a>
@@ -71,13 +71,13 @@ const Content = post.body;
       })}>
         <a 
           href="/blog" 
-          class={button({ variant: 'secondary', size: 'md' })}
+          class={btn({ variant: 'secondary', size: 'md' })}
         >
           他の記事を読む
         </a>
         <a 
           href="/" 
-          class={button({ variant: 'outline', size: 'md' })}
+          class={btn({ variant: 'outline', size: 'md' })}
         >
           ホームに戻る
         </a>

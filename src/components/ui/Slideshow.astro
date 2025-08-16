@@ -1,10 +1,11 @@
 ---
 /**
- * Anko-UI Card Stack Slideshow Component
- * カードスタック式スライドショーコンポーネント - マウススクロールで奥行きアニメーション
+ * Youkan-Themes Slideshow Component
+ * シンプルなスライドショーコンポーネント
  */
 
-import { cardStackSlot } from '../../styled-system/recipes';
+import { css } from '../../styled-system/css';
+import { slide, slideItem, btn } from '../../styled-system/recipes';
 
 export interface Slide {
   title: string;
@@ -12,241 +13,207 @@ export interface Slide {
   image?: string;
   link?: string;
   linkText?: string;
-  pubDate?: Date;
-  tags?: string[];
-  theme?: 'gradient1' | 'gradient2' | 'gradient3' | 'gradient4' | 'teal' | 'gray';
 }
 
 export interface Props {
   slides: Slide[];
   size?: 'sm' | 'md' | 'lg' | 'xl';
-  rounded?: 'none' | 'sm' | 'md' | 'lg' | 'xl';
   autoPlay?: boolean;
   autoPlayInterval?: number;
-  className?: string;
+  showControls?: boolean;
 }
 
 const { 
   slides = [],
   size = 'md',
-  rounded = 'md',
   autoPlay = false,
   autoPlayInterval = 4000,
-  className = ''
+  showControls = true
 } = Astro.props;
 
-const themes = ['gradient1', 'gradient2', 'gradient3', 'gradient4', 'teal', 'gray'];
-const cardStackClasses = cardStackSlot({ size, rounded });
----
+const slideClass = slide({ size });
+
+const controlsStyle = css({
+  position: 'absolute',
+  bottom: '20px',
+  left: '50%',
+  transform: 'translateX(-50%)',
+  display: 'flex',
+  gap: '10px',
+  zIndex: '10',
+});
+
+const indicatorStyle = css({
+  width: '12px',
+  height: '12px',
+  borderRadius: '50%',
+  backgroundColor: 'rgba(255, 255, 255, 0.5)',
+  border: 'none',
+  cursor: 'pointer',
+  transition: 'all 0.3s',
+  _hover: {
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+  },
+});
+
+const activeIndicatorStyle = css({
+  backgroundColor: 'white',
+});
+
+const contentStyle = css({
+  position: 'absolute',
+  bottom: '60px',
+  left: '30px',
+  right: '30px',
+  color: 'white',
+  textAlign: 'center',
+  zIndex: '5',
+});
+
+const titleStyle = css({
+  fontSize: '2rem',
+  fontWeight: 'bold',
+  marginBottom: '0.5rem',
+  textShadow: '0 2px 4px rgba(0,0,0,0.5)',
+  '@media (max-width: 768px)': {
+    fontSize: '1.5rem'
+  }
+});
+
+const descriptionStyle = css({
+  fontSize: '1.1rem',
+  marginBottom: '1rem',
+  textShadow: '0 1px 2px rgba(0,0,0,0.5)',
+  '@media (max-width: 768px)': {
+    fontSize: '1rem'
+  }
+});
+
+const slideImageStyle = css({
+  width: '100%',
+  height: '100%',
+  objectFit: 'cover',
+});
+
+const overlayStyle = css({
+  position: 'absolute',
+  top: '0',
+  left: '0',
+  right: '0',
+  bottom: '0',
+  background: 'linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.7) 100%)',
+  zIndex: '2',
+});
 ---
 
-<div class={`${cardStackClasses.container} ${className}`} id="anko-card-stack">
-  <div class={cardStackClasses.stackContainer} id="anko-stack-container">
-    {slides.map((slide, index) => {
-      const theme = slide.theme || themes[index % themes.length];
-      const backgroundImage = slide.image ? `url(${slide.image})` : '';
-      const cardStyle = backgroundImage 
-        ? `--stack-index: ${index}; z-index: ${slides.length - index}; background-image: ${backgroundImage};`
-        : `--stack-index: ${index}; z-index: ${slides.length - index};`;
-      
-      return (
-        <div 
-          class={cardStackClasses.card} 
-          data-theme={theme}
-          data-index={index}
-          style={cardStyle}
-        >
-          <div class={cardStackClasses.content}>
-            <h2 class={cardStackClasses.title}>
-              {slide.title}
-            </h2>
-            <p class={cardStackClasses.description}>
-              {slide.description}
-            </p>
-            {slide.pubDate && (
-              <time class={cardStackClasses.date}>
-                {slide.pubDate.toLocaleDateString('ja-JP')}
-              </time>
-            )}
-            {slide.tags && slide.tags.length > 0 && (
-              <div class={cardStackClasses.tags}>
-                {slide.tags.slice(0, 3).map(tag => (
-                  <span class={cardStackClasses.tag}>#{tag}</span>
-                ))}
-              </div>
-            )}
-            {slide.link && (
-              <a href={slide.link} class={cardStackClasses.link}>
-                {slide.linkText || '詳細を見る'}
-              </a>
-            )}
-          </div>
-        </div>
-      );
-    })}
-  </div>
+<div class={slideClass} id="youkan-slideshow">
+  {slides.map((slideData, index) => (
+    <div 
+      class={slideItem({ state: index === 0 ? 'active' : 'next' })}
+      data-slide={index}
+    >
+      {slideData.image && (
+        <img 
+          src={slideData.image} 
+          alt={slideData.title}
+          class={slideImageStyle}
+        />
+      )}
+      <div class={overlayStyle}></div>
+      <div class={contentStyle}>
+        <h3 class={titleStyle}>{slideData.title}</h3>
+        <p class={descriptionStyle}>{slideData.description}</p>
+        {slideData.link && (
+          <a 
+            href={slideData.link} 
+            class={btn({ variant: 'secondary', size: 'md' })}
+          >
+            {slideData.linkText || '詳しく見る'}
+          </a>
+        )}
+      </div>
+    </div>
+  ))}
   
-  <div class={cardStackClasses.info}>
-    <span class={cardStackClasses.counter}>
-      <span id="current-slide">1</span> / {slides.length}
-    </span>
-    <p class={cardStackClasses.hint}>
-      マウスホイールでスクロール
-    </p>
-  </div>
+  {showControls && slides.length > 1 && (
+    <div class={controlsStyle}>
+      {slides.map((_, index) => (
+        <button 
+          class={`${indicatorStyle} ${index === 0 ? activeIndicatorStyle : ''}`}
+          data-slide-to={index}
+          aria-label={`スライド ${index + 1} に移動`}
+        ></button>
+      ))}
+    </div>
+  )}
 </div>
 
 <script define:vars={{ autoPlay, autoPlayInterval }}>
-  class AnkoCardStack {
-    constructor() {
-      this.currentIndex = 0;
-      this.totalCards = document.querySelectorAll('[data-index]').length;
-      this.container = document.getElementById('anko-stack-container');
-      this.cards = document.querySelectorAll('[data-index]');
-      this.counter = document.getElementById('current-slide');
-      this.isAnimating = false;
-      this.autoPlayTimer = null;
-      
-      this.init();
-    }
+  let currentSlide = 0;
+  let slideInterval;
+  
+  const slideshow = document.getElementById('youkan-slideshow');
+  const slides = slideshow?.querySelectorAll('[data-slide]');
+  const indicators = slideshow?.querySelectorAll('[data-slide-to]');
+  
+  function showSlide(index) {
+    if (!slides || !indicators) return;
     
-    init() {
-      this.setupCards();
-      this.setupEventListeners();
-      this.updateCounter();
-      
-      if (autoPlay && this.totalCards > 1) {
-        this.startAutoPlay();
-      }
-    }
-    
-    setupCards() {
-      this.cards.forEach((card, index) => {
-        const stackIndex = index - this.currentIndex;
-        this.updateCardPosition(card, stackIndex);
-      });
-    }
-    
-    updateCardPosition(card, stackIndex) {
-      const absIndex = Math.abs(stackIndex);
-      
-      if (stackIndex < 0) {
-        // 前のカード（奥側）
-        card.style.transform = `
-          translateZ(-${absIndex * 100}px) 
-          translateY(${absIndex * 20}px) 
-          scale(${1 - absIndex * 0.1})
-        `;
-        card.style.opacity = Math.max(0.3, 1 - absIndex * 0.3);
-      } else if (stackIndex === 0) {
-        // 現在のカード（手前）
-        card.style.transform = 'translateZ(0px) translateY(0px) scale(1)';
-        card.style.opacity = '1';
+    // Hide all slides
+    slides.forEach((slide, i) => {
+      if (i === index) {
+        slide.classList.remove('slide-item--state_next', 'slide-item--state_prev');
+        slide.classList.add('slide-item--state_active');
+      } else if (i < index) {
+        slide.classList.remove('slide-item--state_active', 'slide-item--state_next');
+        slide.classList.add('slide-item--state_prev');
       } else {
-        // 次のカード（さらに奥側）
-        card.style.transform = `
-          translateZ(-${stackIndex * 100}px) 
-          translateY(${stackIndex * 20}px) 
-          scale(${1 - stackIndex * 0.1})
-        `;
-        card.style.opacity = Math.max(0.1, 1 - stackIndex * 0.3);
+        slide.classList.remove('slide-item--state_active', 'slide-item--state_prev');
+        slide.classList.add('slide-item--state_next');
       }
-      
-      card.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
-    }
+    });
     
-    setupEventListeners() {
-      if (this.container) {
-        this.container.addEventListener('wheel', (e) => {
-          e.preventDefault();
-          
-          if (this.isAnimating) return;
-          
-          if (e.deltaY > 0) {
-            this.nextCard();
-          } else {
-            this.prevCard();
-          }
-        });
-        
-        // タッチイベント
-        let startY = 0;
-        this.container.addEventListener('touchstart', (e) => {
-          startY = e.touches[0].clientY;
-        });
-        
-        this.container.addEventListener('touchend', (e) => {
-          const endY = e.changedTouches[0].clientY;
-          const diff = startY - endY;
-          
-          if (Math.abs(diff) > 50) {
-            if (diff > 0) {
-              this.nextCard();
-            } else {
-              this.prevCard();
-            }
-          }
-        });
+    // Update indicators
+    indicators.forEach((indicator, i) => {
+      if (i === index) {
+        indicator.style.backgroundColor = 'white';
+      } else {
+        indicator.style.backgroundColor = 'rgba(255, 255, 255, 0.5)';
       }
-    }
+    });
     
-    nextCard() {
-      if (this.isAnimating) return;
-      
-      this.isAnimating = true;
-      this.currentIndex = (this.currentIndex + 1) % this.totalCards;
-      this.updateCards();
-      this.updateCounter();
-      
-      setTimeout(() => {
-        this.isAnimating = false;
-      }, 600);
-    }
-    
-    prevCard() {
-      if (this.isAnimating) return;
-      
-      this.isAnimating = true;
-      this.currentIndex = (this.currentIndex - 1 + this.totalCards) % this.totalCards;
-      this.updateCards();
-      this.updateCounter();
-      
-      setTimeout(() => {
-        this.isAnimating = false;
-      }, 600);
-    }
-    
-    updateCards() {
-      this.cards.forEach((card, index) => {
-        const stackIndex = index - this.currentIndex;
-        this.updateCardPosition(card, stackIndex);
-      });
-    }
-    
-    updateCounter() {
-      if (this.counter) {
-        this.counter.textContent = this.currentIndex + 1;
-      }
-    }
-    
-    startAutoPlay() {
-      this.autoPlayTimer = setInterval(() => {
-        this.nextCard();
-      }, autoPlayInterval);
-    }
-    
-    stopAutoPlay() {
-      if (this.autoPlayTimer) {
-        clearInterval(this.autoPlayTimer);
-        this.autoPlayTimer = null;
-      }
+    currentSlide = index;
+  }
+  
+  function nextSlide() {
+    const nextIndex = (currentSlide + 1) % slides.length;
+    showSlide(nextIndex);
+  }
+  
+  function startAutoPlay() {
+    if (autoPlay && slides.length > 1) {
+      slideInterval = setInterval(nextSlide, autoPlayInterval);
     }
   }
   
-  // DOMが読み込まれた後に初期化
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => new AnkoCardStack());
-  } else {
-    new AnkoCardStack();
+  function stopAutoPlay() {
+    if (slideInterval) {
+      clearInterval(slideInterval);
+    }
   }
+  
+  // Event listeners
+  indicators?.forEach((indicator, index) => {
+    indicator.addEventListener('click', () => {
+      stopAutoPlay();
+      showSlide(index);
+      startAutoPlay();
+    });
+  });
+  
+  slideshow?.addEventListener('mouseenter', stopAutoPlay);
+  slideshow?.addEventListener('mouseleave', startAutoPlay);
+  
+  // Initialize
+  startAutoPlay();
 </script>

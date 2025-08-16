@@ -1,7 +1,7 @@
 import { defineRecipe } from '@pandacss/dev';
 
 export const buttonRecipe = defineRecipe({
-  className: 'button',
+  className: 'btn',
   description: 'ボタンコンポーネントのスタイル',
   base: {
     display: 'inline-flex',
@@ -58,27 +58,6 @@ export const buttonRecipe = defineRecipe({
         _hover: {
           backgroundColor: 'semantic.primary.DEFAULT',
           color: 'white',
-        },
-      },
-      ghost: {
-        backgroundColor: 'transparent',
-        color: 'semantic.text.primary',
-        _hover: {
-          backgroundColor: 'semantic.background.secondary',
-        },
-      },
-      teal: {
-        backgroundColor: 'brand.teal',
-        color: 'white',
-        _hover: {
-          backgroundColor: 'semantic.primary.dark',
-        },
-      },
-      mint: {
-        backgroundColor: 'brand.mint',
-        color: 'semantic.text.primary',
-        _hover: {
-          backgroundColor: 'semantic.primary.light',
         },
       },
     },

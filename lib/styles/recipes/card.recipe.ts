@@ -10,7 +10,7 @@ export const cardRecipe = defineRecipe({
     overflow: 'hidden',
     transition: 'transform 0.3s, box-shadow 0.3s',
     _hover: {
-      transform: 'translateY(-4px)',
+      transform: 'translateY(-2px)',
       boxShadow: '0 8px 25px rgba(0,0,0,0.15)',
     },
   },
@@ -33,16 +33,6 @@ export const cardRecipe = defineRecipe({
       },
       elevated: {
         boxShadow: '0 10px 25px rgba(0,0,0,0.1)',
-      },
-      cream: {
-        backgroundColor: 'brand.cream',
-        border: '1px solid',
-        borderColor: 'semantic.border.medium',
-      },
-      mint: {
-        backgroundColor: 'brand.mint',
-        border: '1px solid',
-        borderColor: 'semantic.primary.light',
       },
     },
   },

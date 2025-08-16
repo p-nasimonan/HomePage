@@ -1,6 +1,6 @@
 /**
- * Anko-UI Design System
- * Panda CSS プリセット形式のデザインシステム
+ * Youkan-Themes Design System
+ * Panda CSS プリセット形式のミニマルデザインシステム
  */
 
 import { definePreset } from "@pandacss/dev";
@@ -10,10 +10,10 @@ import * as dimensions from "./tokens/dimensions.ts";
 import * as animations from "./tokens/animations.ts";
 import * as transforms from "./tokens/transforms.ts";
 import * as typographies from "./tokens/typography.ts";
-import { buttonRecipe, badgeRecipe, cardRecipe, postCardRecipe, postCardSlotRecipe, dropdownSlotRecipe, cardStackSlotRecipe } from "./recipes";
+import { buttonRecipe, badgeRecipe, cardRecipe, slideRecipe, slideItemRecipe } from "./recipes";
 
 export default definePreset({
-  name: "anko-ui",
+  name: "youkan-themes",
   theme: {
     tokens: defu(
       {},
@@ -30,15 +30,11 @@ export default definePreset({
       animations.semanticTokens,
     ),
     recipes: {
-      button: buttonRecipe,
+      btn: buttonRecipe,
       badge: badgeRecipe,
       card: cardRecipe,
-      postCard: postCardRecipe,
-    },
-    slotRecipes: {
-      postCardSlot: postCardSlotRecipe,
-      dropdownSlot: dropdownSlotRecipe,
-      cardStackSlot: cardStackSlotRecipe,
+      slide: slideRecipe,
+      slideItem: slideItemRecipe,
     },
     breakpoints: dimensions.breakpoints,
     textStyles: typographies.textStyle,
@@ -90,7 +86,7 @@ export default definePreset({
 /**
  * ライブラリバージョン
  */
-export const ANKO_UI_VERSION = '1.0.0' as const;
+export const YOUKAN_THEMES_VERSION = '1.0.0' as const;
 
 // 従来のエクスポート（後方互換性）
 export * from './tokens';

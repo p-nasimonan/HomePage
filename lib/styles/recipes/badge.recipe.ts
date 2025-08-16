@@ -22,14 +22,6 @@ export const badgeRecipe = defineRecipe({
         backgroundColor: 'semantic.accent.DEFAULT',
         color: 'semantic.text.primary',
       },
-      mint: {
-        backgroundColor: 'brand.mint',
-        color: 'semantic.text.primary',
-      },
-      cream: {
-        backgroundColor: 'brand.cream',
-        color: 'semantic.text.primary',
-      },
       outline: {
         backgroundColor: 'transparent',
         color: 'semantic.primary.DEFAULT',
@@ -45,10 +37,6 @@ export const badgeRecipe = defineRecipe({
       md: {
         fontSize: '12px',
         padding: '4px 12px',
-      },
-      lg: {
-        fontSize: '14px',
-        padding: '6px 16px',
       },
     },
   },

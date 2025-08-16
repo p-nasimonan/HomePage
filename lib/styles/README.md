@@ -1,108 +1,152 @@
-# Anko-UI Design System
+# Youkan-Themes
 
-モダンなWebアプリケーション向けのデザインシステムです。Panda CSSをベースに構築されています。
+AstroとPanda CSSのためのミニマルデザインシステムです。シンプルで使いやすいレシピベースのスタイリングライブラリ。
 
 ## 🚀 特徴
 
+- **ミニマル**: 必要最小限のレシピのみ
 - **Panda CSS**: 高性能なCSS-in-JSライブラリを使用
 - **TypeScript**: 完全な型安全性
-- **レシピベース**: 再利用可能なスタイリングパターン
-- **レスポンシブ**: モバイルファースト設計
-- **テーマサポート**: ダークモード対応
+- **Astro対応**: .astroファイルで簡単に使用可能
 
-## 📦 コンポーネント
+## 📦 レシピ
 
-### Dropdown Component
+### Button (`btn`)
 
-アニメーション付きドロップダウンメニューコンポーネント
+基本的なボタンスタイル
 
 ```astro
 ---
-import { dropdownSlot } from '../styled-system/recipes';
-
-const dropdown = dropdownSlot();
+import { btn } from '../styled-system/recipes';
 ---
 
-<div class={dropdown.trigger}>
-  <button>メニュー</button>
-  <div class={dropdown.content} data-state="closed">
-    <a href="/link1" class={dropdown.item}>アイテム1</a>
-    <a href="/link2" class={dropdown.item}>アイテム2</a>
-    <a href="/link3" class={dropdown.item}>アイテム3</a>
+<button class={btn()}>デフォルト</button>
+<button class={btn({ variant: 'secondary', size: 'lg' })}>大きなセカンダリボタン</button>
+<button class={btn({ variant: 'outline' })}>アウトラインボタン</button>
+```
+
+**バリアント**: `primary`, `secondary`, `outline`  
+**サイズ**: `sm`, `md`, `lg`
+
+### Badge
+
+ラベルやタグ用のバッジスタイル
+
+```astro
+---
+import { badge } from '../styled-system/recipes';
+---
+
+<span class={badge()}>新着</span>
+<span class={badge({ variant: 'secondary', size: 'sm' })}>タグ</span>
+<span class={badge({ variant: 'outline' })}>カテゴリ</span>
+```
+
+**バリアント**: `primary`, `secondary`, `outline`  
+**サイズ**: `sm`, `md`
+
+### Card
+
+コンテンツカード用のスタイル
+
+```astro
+---
+import { card } from '../styled-system/recipes';
+---
+
+<div class={card()}>
+  <h3>カードタイトル</h3>
+  <p>カードの内容</p>
+</div>
+
+<div class={card({ variant: 'elevated', size: 'lg' })}>
+  <h3>大きな浮いているカード</h3>
+</div>
+```
+
+**バリアント**: `default`, `elevated`  
+**サイズ**: `sm`, `md`, `lg`
+
+### Slide & SlideItem
+
+スライドショー用のレシピ（組み合わせて使用）
+
+```astro
+---
+import { slide, slideItem } from '../styled-system/recipes';
+---
+
+<div class={slide({ size: 'lg' })}>
+  <div class={slideItem({ state: 'active' })}>
+    <img src="/image1.jpg" alt="スライド1" />
+  </div>
+  <div class={slideItem({ state: 'next' })}>
+    <img src="/image2.jpg" alt="スライド2" />
+  </div>
+  <div class={slideItem({ state: 'prev' })}>
+    <img src="/image3.jpg" alt="スライド3" />
   </div>
 </div>
 ```
 
-#### 機能
-- ✅ スムーズなアニメーション（fade/slide/scale）
-- ✅ 3つのサイズ（sm/md/lg）
-- ✅ 位置調整（left/right/center）
-- ✅ 当たり判定の最適化
-- ✅ キーボードアクセシビリティ対応
+**Slideサイズ**: `sm`, `md`, `lg`, `xl`  
+**SlideItem状態**: `active`, `next`, `prev`
 
-### Slideshow Component
+## 💫 使用方法
 
-高機能なスライドショーコンポーネント
+### 基本的な使い方
 
 ```astro
 ---
-import Slideshow from '../components/ui/Slideshow.astro';
-import type { SlideshowSlide } from '../../lib/styles/components';
+// styled-systemから生成されたレシピをインポート
+import { btn, badge, card } from '../styled-system/recipes';
+---
 
-const slides: SlideshowSlide[] = [
-  {
-    title: "タイトル1",
-    description: "説明文",
-    link: "/page1",
-    linkText: "詳細を見る",
-    theme: "gradient1"
-  }
+<div class={card()}>
+  <h2>記事タイトル</h2>
+  <span class={badge()}>新着</span>
+  <p>記事の内容...</p>
+  <button class={btn({ variant: 'primary' })}>続きを読む</button>
+</div>
+```
+
+### スライドショーの実装例
+
+```astro
+---
+import { slide, slideItem } from '../styled-system/recipes';
+
+const slides = [
+  { src: '/image1.jpg', alt: 'スライド1' },
+  { src: '/image2.jpg', alt: 'スライド2' },
+  { src: '/image3.jpg', alt: 'スライド3' },
 ];
 ---
 
-<Slideshow 
-  slides={slides}
-  size="lg"
-  autoPlay={true}
-  autoPlayInterval={6000}
-  showNavigation={true}
-  showIndicators={true}
-/>
+<div class={slide()}>
+  {slides.map((slideData, index) => (
+    <div class={slideItem({ state: index === 0 ? 'active' : 'next' })}>
+      <img src={slideData.src} alt={slideData.alt} />
+    </div>
+  ))}
+</div>
 ```
 
-#### 機能
-- ✅ 自動再生
-- ✅ タッチスワイプ対応
-- ✅ ナビゲーションボタン
-- ✅ インジケーター
-- ✅ 6つのテーマ（グラデーション）
-- ✅ レスポンシブデザイン
+## 🎯 設計思想
 
-## 🎨 レシピ（Recipes）
+**Youkan-Themes**は「必要最小限」を重視したミニマルデザインシステムです：
 
-### Button Recipe
+- **シンプル**: 複雑な機能は排除し、基本的なスタイリングレシピのみ提供
+- **レシピ駆動**: 大きなコンポーネントではなく、小さなレシピを組み合わせて使用
+- **Astro最適化**: .astroファイルでの使用を前提とした設計
 
-```astro
----
-import { button } from '../styled-system/recipes';
+## 📄 ライセンス
+
+MIT License
+
 ---
 
-<button class={button({ variant: 'primary', size: 'lg' })}>
-  ボタン
-</button>
-```
-
-**バリアント:**
-- `primary` - プライマリボタン（デフォルト）
-- `secondary` - セカンダリボタン  
-- `outline` - アウトラインボタン
-
-**サイズ:**
-- `sm` - スモール
-- `md` - ミディアム（デフォルト）
-- `lg` - ラージ
-
-### Card Recipe
+**Youkan-Themes v1.0.0** - シンプルで美味しいデザインシステム 🍡
 
 ```astro
 ---

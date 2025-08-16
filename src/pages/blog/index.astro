@@ -1,7 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import { css } from '../../styled-system/css';
-import { badge, button } from '../../styled-system/recipes';
+import { badge, btn } from '../../styled-system/recipes';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Section from '../../components/ui/Section.astro';
 import Grid from '../../components/ui/Grid.astro';
@@ -109,7 +109,7 @@ const currentPosts = posts.slice(startIndex, endIndex);
         {currentPage > 1 && (
           <a 
             href={`/blog?page=${currentPage - 1}`}
-            class={button({ variant: 'outline', size: 'sm' })}
+            class={btn({ variant: 'outline', size: 'sm' })}
           >
             前のページ
           </a>
@@ -129,8 +129,8 @@ const currentPosts = posts.slice(startIndex, endIndex);
               <a 
                 href={`/blog?page=${pageNum}`} 
                 class={pageNum === currentPage 
-                  ? button({ variant: 'primary', size: 'sm' })
-                  : button({ variant: 'outline', size: 'sm' })
+                  ? btn({ variant: 'primary', size: 'sm' })
+                  : btn({ variant: 'outline', size: 'sm' })
                 }
               >
                 {pageNum}
@@ -142,7 +142,7 @@ const currentPosts = posts.slice(startIndex, endIndex);
         {currentPage < totalPages && (
           <a 
             href={`/blog?page=${currentPage + 1}`}
-            class={button({ variant: 'outline', size: 'sm' })}
+            class={btn({ variant: 'outline', size: 'sm' })}
           >
             次のページ
           </a>

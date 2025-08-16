@@ -1,250 +1,113 @@
 ---
 import { css } from '../styled-system/css';
-import { dropdownSlot } from '../styled-system/recipes';
+import { btn } from '../styled-system/recipes';
 
 export interface Props {
-  currentPage?: 'home' | 'blog' | 'anko-ui';
+  currentPage?: 'home' | 'blog' | 'youkan-themes';
 }
 
 const { currentPage = 'home' } = Astro.props;
 
-// Anko-UI ドロップダウンレシピを使用
-const dropdown = dropdownSlot({
-  size: 'md',
-  animation: 'slide',
-  position: 'left'
-});
----
-
-<header class={css({
+const headerStyle = css({
   background: 'white',
   boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
   position: 'sticky',
   top: '0',
   zIndex: '100',
-  overflow: 'visible'
-})}>
-  <div class={css({
-    maxWidth: '1200px',
-    margin: '0 auto',
-    padding: '0 20px',
-    overflow: 'visible',
-    position: 'relative'
-  })}>
-    <div class={css({
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      padding: '1rem 0',
-      height: '4rem',
-      '@media (max-width: 768px)': {
-        padding: '0.75rem 0',
-        height: '3.5rem'
-      }
-    })}>
-      <h1 class={css({
-        fontSize: '1.5rem',
-        fontWeight: 'bold',
-        margin: '0',
-        '@media (max-width: 768px)': {
-          fontSize: '1.25rem'
-        }
-      })}>
-        <a href="/" class={css({
-          color: 'teal.500',
-          textDecoration: 'none'
-        })}>ようかん 技術ブログ</a>
-      </h1>
+});
 
-      <!-- デスクトップナビゲーション -->
-      <nav class={css({
-        display: 'block',
-        overflow: 'visible',
-        '@media (max-width: 768px)': {
-          display: 'none'
-        }
-      })}>
-        <ul class={css({
-          display: 'flex',
-          listStyle: 'none',
-          gap: '2rem',
-          margin: '0',
-          padding: '0',
-          overflow: 'visible'
-        })}>
-          <li>
-            <a href="/" class={css({
-              textDecoration: 'none',
-              color: currentPage === 'home' ? 'teal.500' : 'gray.900',
-              fontWeight: '500',
-              transition: 'color 0.3s',
-              _hover: { color: 'teal.500' }
-            })}>
-              ホーム
-            </a>
-          </li>
-          <li>
-            <a href="/blog" class={css({
-              textDecoration: 'none',
-              color: currentPage === 'blog' ? 'teal.500' : 'gray.900',
-              fontWeight: '500',
-              transition: 'color 0.3s',
-              _hover: { color: 'teal.500' }
-            })}>
-              ブログ
-            </a>
-          </li>
-        </ul>
+const containerStyle = css({
+  maxWidth: '1200px',
+  margin: '0 auto',
+  padding: '0 20px',
+});
+
+const navStyle = css({
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  padding: '1rem 0',
+  height: '4rem',
+  '@media (max-width: 768px)': {
+    padding: '0.75rem 0',
+    height: '3.5rem'
+  }
+});
+
+const logoStyle = css({
+  fontSize: '1.5rem',
+  fontWeight: 'bold',
+  margin: '0',
+  color: 'semantic.text.primary',
+  textDecoration: 'none',
+  _hover: {
+    color: 'semantic.primary.DEFAULT',
+  },
+  '@media (max-width: 768px)': {
+    fontSize: '1.25rem'
+  }
+});
+
+const navLinksStyle = css({
+  display: 'flex',
+  gap: '2rem',
+  alignItems: 'center',
+  '@media (max-width: 768px)': {
+    gap: '1rem'
+  }
+});
+
+const navLinkStyle = css({
+  textDecoration: 'none',
+  color: 'semantic.text.secondary',
+  fontWeight: '500',
+  fontSize: '1rem',
+  padding: '0.5rem 1rem',
+  borderRadius: '6px',
+  transition: 'all 0.2s',
+  _hover: {
+    color: 'semantic.text.primary',
+    backgroundColor: 'semantic.background.secondary',
+  },
+  '@media (max-width: 768px)': {
+    fontSize: '0.9rem',
+    padding: '0.5rem 0.75rem'
+  }
+});
+
+const activeLinkStyle = css({
+  color: 'semantic.primary.DEFAULT',
+  backgroundColor: 'semantic.primary.light',
+});
+---
+
+<header class={headerStyle}>
+  <div class={containerStyle}>
+    <div class={navStyle}>
+      <a href="/" class={logoStyle}>
+        🍡 Youkan Blog
+      </a>
+      
+      <nav class={navLinksStyle}>
+        <a 
+          href="/" 
+          class={`${navLinkStyle} ${currentPage === 'home' ? activeLinkStyle : ''}`}
+        >
+          ホーム
+        </a>
+        <a 
+          href="/blog" 
+          class={`${navLinkStyle} ${currentPage === 'blog' ? activeLinkStyle : ''}`}
+        >
+          ブログ
+        </a>
+        <a 
+          href="/youkan-themes" 
+          class={`${navLinkStyle} ${currentPage === 'youkan-themes' ? activeLinkStyle : ''}`}
+        >
+          テーマ
+        </a>
       </nav>
-
-      <!-- モバイルメニューボタン -->
-      <button 
-        id="mobile-menu-button"
-        class={css({
-          display: 'none',
-          background: 'transparent',
-          border: 'none',
-          padding: '0.5rem',
-          cursor: 'pointer',
-          '@media (max-width: 768px)': {
-            display: 'block'
-          }
-        })}
-        onclick="toggleMobileMenu()"
-      >
-        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-        </svg>
-      </button>
     </div>
-
-    <!-- モバイルナビゲーション -->
-    <nav 
-      id="mobile-menu"
-      class={css({
-        display: 'none',
-        '@media (max-width: 768px)': {
-          borderTop: '1px solid',
-          borderColor: 'gray.200',
-          paddingTop: '1rem',
-          paddingBottom: '1rem'
-        }
-      })}
-      style="display: none;"
-    >
-      <ul class={css({
-        listStyle: 'none',
-        margin: '0',
-        padding: '0',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '1rem'
-      })}>
-        <li>
-          <a href="/" class={css({
-            textDecoration: 'none',
-            color: currentPage === 'home' ? 'teal.500' : 'gray.900',
-            fontWeight: '500',
-            fontSize: '1.1rem',
-            display: 'block',
-            padding: '0.5rem 0'
-          })}>
-            ホーム
-          </a>
-        </li>
-        <li>
-          <a href="/blog" class={css({
-            textDecoration: 'none',
-            color: currentPage === 'blog' ? 'teal.500' : 'gray.900',
-            fontWeight: '500',
-            fontSize: '1.1rem',
-            display: 'block',
-            padding: '0.5rem 0'
-          })}>
-            ブログ
-          </a>
-        </li>
-        <li>
-          <a href="/anko-ui" class={css({
-            textDecoration: 'none',
-            color: currentPage === 'anko-ui' ? 'teal.500' : 'gray.900',
-            fontWeight: '500',
-            fontSize: '1.1rem',
-            display: 'block',
-            padding: '0.5rem 0'
-          })}>
-            Anko-UI
-          </a>
-        </li>
-        <li class={css({ marginLeft: '1rem' })}>
-          <a href="/anko-ui/docs" class={css({
-            textDecoration: 'none',
-            color: 'gray.600',
-            fontSize: '1rem',
-            display: 'block',
-            padding: '0.25rem 0'
-          })}>
-            ドキュメント
-          </a>
-        </li>
-        <li class={css({ marginLeft: '1rem' })}>
-          <a href="/anko-ui/playground" class={css({
-            textDecoration: 'none',
-            color: 'gray.600',
-            fontSize: '1rem',
-            display: 'block',
-            padding: '0.25rem 0'
-          })}>
-            プレイグラウンド
-          </a>
-        </li>
-      </ul>
-    </nav>
   </div>
 </header>
-
-<script>
-  // グローバルスコープで関数を定義
-  declare global {
-    interface Window {
-      showDropdown: () => void;
-      hideDropdown: () => void;
-      toggleMobileMenu: () => void;
-    }
-  }
-
-  let dropdownTimeout: ReturnType<typeof setTimeout>;
-
-  function showDropdown() {
-    clearTimeout(dropdownTimeout);
-    const dropdown = document.getElementById('anko-ui-dropdown');
-    if (dropdown) {
-      dropdown.setAttribute('data-state', 'open');
-    }
-  }
-
-  function hideDropdown() {
-    dropdownTimeout = setTimeout(() => {
-      const dropdown = document.getElementById('anko-ui-dropdown');
-      if (dropdown) {
-        dropdown.setAttribute('data-state', 'closed');
-      }
-    }, 200);
-  }
-
-  function toggleMobileMenu() {
-    const menu = document.getElementById('mobile-menu');
-    if (menu) {
-      if (menu.style.display === 'none' || menu.style.display === '') {
-        menu.style.display = 'block';
-      } else {
-        menu.style.display = 'none';
-      }
-    }
-  }
-
-  // グローバルスコープに関数を追加
-  window.showDropdown = showDropdown;
-  window.hideDropdown = hideDropdown;
-  window.toggleMobileMenu = toggleMobileMenu;
-</script>

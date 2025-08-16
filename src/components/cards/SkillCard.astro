@@ -1,12 +1,12 @@
 ---
-import { card } from '../styled-system/recipes';
-import { css } from '../styled-system/css';
+import { card } from '../../styled-system/recipes';
+import { css } from '../../styled-system/css';
 
 export interface Props {
   icon: string;
   title: string;
   description: string;
-  variant?: 'default' | 'elevated' | 'cream' | 'mint';
+  variant?: 'default' | 'elevated';
   size?: 'sm' | 'md' | 'lg';
 }
 
@@ -15,24 +15,32 @@ const {
   title, 
   description, 
   variant = 'default',
-  size = 'lg'
+  size = 'md'
 } = Astro.props;
+
+const iconStyle = css({
+  fontSize: '3rem',
+  marginBottom: '1rem',
+  textAlign: 'center'
+});
+
+const titleStyle = css({
+  fontSize: '1.3rem',
+  marginBottom: '1rem',
+  color: 'semantic.text.primary',
+  textAlign: 'center',
+  fontWeight: '600'
+});
+
+const descriptionStyle = css({
+  color: 'semantic.text.secondary',
+  textAlign: 'center',
+  lineHeight: '1.5'
+});
 ---
 
 <div class={card({ variant, size })}>
-  <div class={css({
-    fontSize: '3rem',
-    marginBottom: '1rem',
-    textAlign: 'center'
-  })}>{icon}</div>
-  <h4 class={css({
-    fontSize: '1.3rem',
-    marginBottom: '1rem',
-    color: 'semantic.text.primary',
-    textAlign: 'center'
-  })}>{title}</h4>
-  <p class={css({
-    color: 'semantic.text.secondary',
-    textAlign: 'center'
-  })}>{description}</p>
+  <div class={iconStyle}>{icon}</div>
+  <h4 class={titleStyle}>{title}</h4>
+  <p class={descriptionStyle}>{description}</p>
 </div>

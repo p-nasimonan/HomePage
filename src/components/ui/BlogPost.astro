@@ -1,6 +1,6 @@
 ---
 import { css } from '../../styled-system/css';
-import { badge, button } from '../../styled-system/recipes';
+import { badge, btn, card } from '../../styled-system/recipes';
 
 export interface Props {
   title: string;
@@ -17,179 +17,164 @@ const {
   image,
   tags 
 } = Astro.props;
+
+const headerStyle = css({
+  padding: '2rem',
+  borderBottom: '1px solid',
+  borderColor: 'semantic.border.light',
+  textAlign: 'center'
+});
+
+const titleStyle = css({
+  fontSize: '2.5rem',
+  fontWeight: 'bold',
+  marginBottom: '1rem',
+  color: 'semantic.text.primary',
+  lineHeight: '1.2',
+  '@media (max-width: 768px)': {
+    fontSize: '2rem'
+  }
+});
+
+const metaStyle = css({
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  gap: '1rem',
+  marginBottom: '1rem',
+  flexWrap: 'wrap'
+});
+
+const dateStyle = css({
+  color: 'semantic.text.secondary',
+  fontSize: '0.9rem'
+});
+
+const tagsStyle = css({
+  display: 'flex',
+  gap: '0.5rem',
+  flexWrap: 'wrap'
+});
+
+const descriptionStyle = css({
+  fontSize: '1.1rem',
+  color: 'semantic.text.secondary',
+  lineHeight: '1.6',
+  maxWidth: '800px',
+  margin: '0 auto'
+});
+
+const imageStyle = css({
+  width: '100%',
+  height: '300px',
+  objectFit: 'cover',
+  display: 'block'
+});
+
+const contentStyle = css({
+  padding: '2rem',
+  fontSize: '1.1rem',
+  lineHeight: '1.8',
+  color: 'semantic.text.primary',
+  '& h2': {
+    fontSize: '1.8rem',
+    fontWeight: 'bold',
+    marginTop: '2rem',
+    marginBottom: '1rem',
+    color: 'semantic.text.primary'
+  },
+  '& h3': {
+    fontSize: '1.5rem',
+    fontWeight: 'bold',
+    marginTop: '1.5rem',
+    marginBottom: '0.75rem',
+    color: 'semantic.text.primary'
+  },
+  '& p': {
+    marginBottom: '1rem'
+  },
+  '& ul, & ol': {
+    marginBottom: '1rem',
+    paddingLeft: '1.5rem'
+  },
+  '& code': {
+    backgroundColor: 'semantic.background.secondary',
+    padding: '0.25rem 0.5rem',
+    borderRadius: '4px',
+    fontSize: '0.9rem',
+    fontFamily: 'monospace'
+  },
+  '& pre': {
+    backgroundColor: 'semantic.background.secondary',
+    padding: '1rem',
+    borderRadius: '8px',
+    overflow: 'auto',
+    marginBottom: '1rem'
+  },
+  '& img': {
+    maxWidth: '100%',
+    height: 'auto',
+    borderRadius: '8px',
+    marginBottom: '1rem'
+  },
+  '& a': {
+    color: 'semantic.primary.DEFAULT',
+    textDecoration: 'underline',
+    _hover: {
+      color: 'semantic.primary.light'
+    }
+  }
+});
+
+const footerStyle = css({
+  padding: '2rem',
+  borderTop: '1px solid',
+  borderColor: 'semantic.border.light',
+  textAlign: 'center'
+});
 ---
 
-<article class={css({
-  background: 'semantic.background.primary',
-  borderRadius: '12px',
-  boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
-  overflow: 'hidden',
-  marginBottom: '2rem'
-})}>
+<article class={card({ variant: 'default', size: 'lg' })}>
   <!-- 記事ヘッダー -->
-  <header class={css({
-    padding: '2rem 2rem 1rem',
-    textAlign: 'center',
-    borderBottom: '1px solid',
-    borderColor: 'semantic.border.light'
-  })}>
-    {image && (
-      <div class={css({
-        width: '100%',
-        height: '300px',
-        overflow: 'hidden',
-        borderRadius: '8px',
-        marginBottom: '2rem'
-      })}>
-        <img 
-          src={image} 
-          alt={title} 
-          class={css({
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover'
-          })} 
-        />
-      </div>
-    )}
-    
-    <h1 class={css({
-      fontSize: '2.5rem',
-      marginBottom: '1rem',
-      color: 'semantic.text.primary',
-      lineHeight: '1.2',
-      '@media (max-width: 768px)': {
-        fontSize: '2rem'
-      }
-    })}>{title}</h1>
-    
-    <p class={css({
-      fontSize: '1.1rem',
-      color: 'semantic.text.secondary',
-      marginBottom: '1.5rem',
-      lineHeight: '1.6'
-    })}>{description}</p>
-    
-    <div class={css({
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      gap: '1rem',
-      flexWrap: 'wrap',
-      '@media (max-width: 768px)': {
-        flexDirection: 'column',
-        gap: '0.5rem'
-      }
-    })}>
-      <time 
-        datetime={pubDate.toISOString()}
-        class={css({
-          color: 'semantic.text.secondary',
-          fontSize: '0.9rem'
-        })}
-      >
-        {pubDate.toLocaleDateString('ja-JP', {
-          year: 'numeric',
-          month: 'long',  
-          day: 'numeric'
+  <header class={headerStyle}>
+    <h1 class={titleStyle}>{title}</h1>
+    <div class={metaStyle}>
+      <time datetime={pubDate.toISOString()} class={dateStyle}>
+        {pubDate.toLocaleDateString('ja-JP', { 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric' 
         })}
       </time>
-      
       {tags && tags.length > 0 && (
-        <div class={css({
-          display: 'flex',
-          gap: '0.5rem',
-          flexWrap: 'wrap',
-          justifyContent: 'center'
-        })}>
-          {tags.map((tag) => (
-            <span class={badge({ variant: 'mint', size: 'sm' })}>{tag}</span>
+        <div class={tagsStyle}>
+          {tags.map(tag => (
+            <span class={badge({ variant: 'secondary', size: 'sm' })}>{tag}</span>
           ))}
         </div>
       )}
     </div>
+    <p class={descriptionStyle}>{description}</p>
   </header>
 
-  <!-- 記事コンテンツ -->
-  <div class={css({
-    padding: '2rem',
-    lineHeight: '1.8',
-    fontSize: '1.1rem',
-    color: 'semantic.text.primary',
-    '& h1': {
-      fontSize: '2rem',
-      marginTop: '2rem',
-      marginBottom: '1rem',
-      color: 'semantic.text.primary',
-      borderBottom: '2px solid',
-      borderColor: 'brand.teal',
-      paddingBottom: '0.5rem'
-    },
-    '& h2': {
-      fontSize: '1.6rem',
-      marginTop: '1.5rem',
-      marginBottom: '1rem',
-      color: 'semantic.text.primary'
-    },
-    '& h3': {
-      fontSize: '1.3rem',
-      marginTop: '1.5rem',
-      marginBottom: '1rem',
-      color: 'semantic.text.primary'
-    },
-    '& p': {
-      marginBottom: '1rem'
-    },
-    '& ul, & ol': {
-      marginBottom: '1rem',
-      paddingLeft: '2rem'
-    },
-    '& li': {
-      marginBottom: '0.5rem'
-    },
-    '& blockquote': {
-      borderLeft: '4px solid',
-      borderColor: 'brand.teal',
-      paddingLeft: '1rem',
-      marginLeft: '0',
-      marginRight: '0',
-      marginBottom: '1rem',
-      fontStyle: 'italic',
-      color: 'semantic.text.secondary'
-    },
-    '& code': {
-      backgroundColor: 'semantic.background.secondary',
-      padding: '0.2rem 0.4rem',
-      borderRadius: '4px',
-      fontSize: '0.9rem',
-      fontFamily: 'monospace'
-    },
-    '& pre': {
-      backgroundColor: 'semantic.text.primary',
-      color: 'white',
-      padding: '1rem',
-      borderRadius: '8px',
-      overflow: 'auto',
-      marginBottom: '1rem'
-    },
-    '& pre code': {
-      backgroundColor: 'transparent',
-      padding: '0'
-    },
-    '& a': {
-      color: 'brand.teal',
-      textDecoration: 'underline',
-      _hover: {
-        color: 'semantic.primary.dark'
-      }
-    },
-    '& img': {
-      maxWidth: '100%',
-      height: 'auto',
-      borderRadius: '8px',
-      marginBottom: '1rem'
-    }
-  })}>
+  <!-- 記事画像 -->
+  {image && (
+    <img 
+      src={image} 
+      alt={title}
+      class={imageStyle}
+    />
+  )}
+
+  <!-- 記事内容 -->
+  <div class={contentStyle}>
     <slot />
   </div>
+
+  <!-- ナビゲーション -->
+  <footer class={footerStyle}>
+    <a href="/blog" class={btn({ variant: 'outline', size: 'md' })}>
+      ← ブログ一覧に戻る
+    </a>
+  </footer>
 </article>
