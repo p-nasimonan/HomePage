@@ -40,7 +40,7 @@ jobs:
           
           # リモートの追加（既存のリモートを削除してから追加）
           git remote remove gitlab || true
-          git remote add gitlab "git@gitlab:root/homepage.git"
+          git remote add gitlab "git@gitlab:root/blog.git"
           
           # デバッグ情報の出力
           echo "Pushing to GitLab..."
